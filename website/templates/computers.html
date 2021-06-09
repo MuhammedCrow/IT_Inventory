@@ -1,9 +1,16 @@
 {% extends "base.html" %} {% block title %}Home{% endblock %} {% block content %}
-<div class="container">
+<div class="container border p-md-4">
     <ul class="nav nav-tabs">
-        <li class="active"><a href="#">Home</a></li>
-        <li><a href="#">Menu 1</a></li>
-        <li><a href="#">Menu 2</a></li>
-        <li><a href="#">Menu 3</a></li>
+        <li class="nav-item"><a class="active nav-link" data-toggle="tab" href="#add">Add</a></li>
+        <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#issue">Issue</a></li>
     </ul>
-</div>{% endblock %}
+<div class="tab-content">
+    <div class="active tab-pane" id="add">
+        <h3>Add</h3>
+    </div>
+    <div class="tab-pane" id="issue">
+        <h3>Issue</h3>
+    </div>
+</div>
+</div>
+{% endblock %}
