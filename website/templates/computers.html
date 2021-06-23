@@ -1,16 +1,25 @@
 {% extends "base.html" %} {% block title %}Home{% endblock %} {% block content %}
 <div class="border p-md-4 my-5">
-    <ul class="nav nav-tabs nav-fill">
-        <li class="nav-item"><a class="active nav-link" data-bs-toggle="tab" href="#add">Add</a></li>
-        <li class="nav-item"><a class="nav-link" data-bs-toggle="tab" href="#issue">Issue</a></li>
+    <ul class="nav nav-tabs justify-content-end">
+        <li class="nav-item"><a class="active activ-dark nav-link px-5 text-" data-bs-toggle="tab" href="#add">
+            <h4 class="tab-text">Add</h4>
+    </a></li>
+        <li class="nav-item"><a class="nav-link px-5" data-bs-toggle="tab" href="#issue">
+            <h4 class="tab-text">Issue</h4>
+    </a></li>
     </ul>
     <div class="tab-content">
         <div class="active tab-pane" id="add">
-            <h3>Add Computers</h3>
-
+            <h2>Add Computers</h2>
+            <select name="cars" id="cars">
+                <option value="volvo">Volvo</option>
+                <option value="saab">Saab</option>
+                <option value="mercedes">Mercedes</option>
+                <option value="audi">Audi</option>
+              </select>
         </div>
         <div class="tab-pane" id="issue">
-            <h3>Issue Computers</h3>
+            <h2>Issue Computers</h2>
         </div>
     </div>
 </div>
