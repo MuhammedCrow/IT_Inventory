@@ -1,1 +1,8 @@
-/* No CSS *//*# sourceMappingURL=main.css.map */
+.text-light:hover {
+  background-color: #6610f2;
+}
+
+li:hover {
+  color: #6610f2;
+}
+/*# sourceMappingURL=main.css.map */
