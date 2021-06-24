@@ -1,24 +1,63 @@
 {% extends "base.html" %} {% block title %}Home{% endblock %} {% block content %}
 <div class="border p-md-4 my-5">
     <ul class="nav nav-tabs justify-content-end">
-        <li class="nav-item"><a class="active activ-dark nav-link px-5 text-" data-bs-toggle="tab" href="#add">
-            <h4 class="tab-text">Add</h4>
-    </a></li>
-        <li class="nav-item"><a class="nav-link px-5" data-bs-toggle="tab" href="#issue">
-            <h4 class="tab-text">Issue</h4>
-    </a></li>
+        <li class="nav-item">
+            <a class="active activ-dark nav-link px-5 text-" data-bs-toggle="tab" href="#add">
+                </i>
+                <h4 class="tab-text">Add</h4>
+            </a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link px-5" data-bs-toggle="tab" href="#issue">
+                <h4 class="tab-text">Issue</h4>
+            </a>
+        </li>
     </ul>
-    <div class="tab-content">
+    <div class="tab-content my-5">
         <div class="active tab-pane" id="add">
             <h2>Add Computers</h2>
-            <select name="cars" id="cars">
-                <option value="volvo">Volvo</option>
-                <option value="saab">Saab</option>
-                <option value="mercedes">Mercedes</option>
-                <option value="audi">Audi</option>
-              </select>
+            <div class="container my-3">
+                <form action="" method="post">
+                    <div class="row mb-3">
+                        <div class="col">
+                            <label for="model" class="text-light h4">Make & Model</label>
+                        </div>
+                        <div class="col">
+                            <select id="model" class="form-select form-control">
+                                <option selected>Open this select menu</option>
+                                <option value="1">One</option>
+                                <option value="2">Two</option>
+                                <option value="3">Three</option>
+                              </select>
+                        </div>
+                    </div>
+                    <div class="row mb-3">
+                        <div class="col">
+                            <label for="condition" class="text-light h4">Condition</label>
+                        </div>
+                        <div class="col">
+                            <select id="condition" class="form-select form-control">
+                                <option selected>Select Condition </option>
+                                <option value="1">New</option>
+                                <option value="2">Used</option>
+                              </select>
+                        </div>
+                    </div>
+                    <div class="row mb-3">
+                        <div class="col">
+                            <label for="snumber" class="text-light h4">Serial Number</label>
+                        </div>
+                        <div class="col">
+                            <input id="snumber" type="text" class="form-control">
+                        </div>
+                    </div>
+                    <div class="row mb-3">
+                        <button class="btn btn-color col-2 ms-auto text-light h4" type="button ">Submit</button>
+                    </div>
+                </form>
+            </div>
         </div>
-        <div class="tab-pane" id="issue">
+        <div class="tab-pane " id="issue ">
             <h2>Issue Computers</h2>
         </div>
     </div>

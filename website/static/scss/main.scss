@@ -1,8 +1,8 @@
-$bg-second : #6610f2;
-
-.text-light:hover{
-  background-color: $bg-second;
+$bg-second: #6610f2;
+.home-items:hover {
+    background-color: $bg-second;
 }
-li:hover {
-  color: $bg-second;
- }
+
+.btn-color {
+    background-color: $bg-second;
+}

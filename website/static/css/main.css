@@ -1,12 +1,8 @@
-.text-light:hover {
+.home-items:hover {
   background-color: #6610f2;
 }
 
-li:hover {
-  color: #6610f2;
-}
-
-nav-link:active {
+.btn-color {
   background-color: #6610f2;
 }
 /*# sourceMappingURL=main.css.map */
