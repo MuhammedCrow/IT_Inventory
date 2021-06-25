@@ -12,14 +12,22 @@ def home():
 def computers():
     return render_template("computers.html")
 
+
 @views.route('/monitors')
 def monitors():
     return render_template("monitors.html")
+
 
 @views.route('/printers')
 def printers():
     return render_template("printers.html")
 
+
 @views.route('/network')
 def network():
     return render_template("network.html")
+
+
+@views.route('/cartridges')
+def cartridges():
+    return render_template("cartridges.html")
