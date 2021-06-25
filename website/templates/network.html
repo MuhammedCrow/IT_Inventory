@@ -1,4 +1,4 @@
-{% extends "base.html" %} {% block title %}Computers{% endblock %} {% block content %}
+{% extends "base.html" %} {% block title %}Network Devices{% endblock %} {% block content %}
 <div class="border p-md-4 my-5">
     <ul class="nav nav-tabs justify-content-end">
         <li class="nav-item">
@@ -15,7 +15,7 @@
     </ul>
     <div class="tab-content  my-5">
         <div class="active tab-pane" id="add">
-            <h2>Add Computers</h2>
+            <h2>Add Network Devices</h2>
             <div class="my-3">
                 <form action="" method="post">
                     <div class="row mb-3">
@@ -45,6 +45,16 @@
                     </div>
                     <div class="row mb-3">
                         <div class="col">
+                            <label for="type" class="text-light h4">Catagory</label>
+                        </div>
+                        <div class="col">
+                            <select id="type" class="form-select ms-auto form-control">
+                                <option selected>Select Catagory</option>
+                              </select>
+                        </div>
+                    </div>
+                    <div class="row mb-3">
+                        <div class="col">
                             <label for="snumber" class="text-light h4">Serial Number</label>
                         </div>
                         <div class="col">
@@ -62,7 +72,7 @@
             </div>
         </div>
         <div class="tab-pane" id="issue">
-            <h2>Issue Computers</h2>
+            <h2>Issue Network Devices</h2>
             <div class="my-3">
                 <form action="" method="post">
                     <div class="row mb-3">
@@ -92,6 +102,16 @@
                                 <option selected>Select Condition </option>
                                 <option value="1">New</option>
                                 <option value="2">Used</option>
+                              </select>
+                        </div>
+                    </div>
+                    <div class="row mb-3">
+                        <div class="col">
+                            <label for="type" class="text-light h4">Catagory</label>
+                        </div>
+                        <div class="col">
+                            <select id="type" class="form-select ms-auto form-control" disabled>
+                                <option selected>Select Catagory </option>
                               </select>
                         </div>
                     </div>
