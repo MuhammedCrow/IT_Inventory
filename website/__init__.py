@@ -1,4 +1,16 @@
 from flask import Flask
+from sqlalchemy import create_engine
+import pandas as pd
+
+SERVER = 'DESKTOP-N60GPF0\MSSQLSERVER'
+DATABASE = 'inventory'
+DRIVER = 'ODBC Driver 17 for SQL Server'
+USERNAME = 'mualaa'
+PASSWORD = 'P@ssw0rd'
+DATABASE_CONNECTION = f'mssql://{USERNAME}:{PASSWORD}@{SERVER}/{DATABASE}?driver={DRIVER}'
+
+engine = create_engine(DATABASE_CONNECTION)
+conn = engine.connect()
 
 
 def create_app():
