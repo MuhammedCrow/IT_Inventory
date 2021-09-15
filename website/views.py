@@ -31,3 +31,14 @@ def network():
 @views.route('/cartridges')
 def cartridges():
     return render_template("cartridges.html")
+
+
+@views.route('/addCon', methods=['GET', 'POST'])
+def addCon():
+    from .db_connect import connect_sql
+    conx = connect_sql()
+    query = 'INSERT into dbo.consumable (name, categoryId, amount, makeAndModelId) values (?, ?, ?, ?)'
+    cursor = conx.cursor()
+    cursor.execute(query, 'test', 1, 10, 1)
+    conx.comit()
+    conx.close()

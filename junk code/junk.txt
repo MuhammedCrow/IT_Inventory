@@ -24,3 +24,14 @@ cursor.execute(query)
 data = cursor.fetchall()
 print(data)
 conx.close()
+
+// working insert query
+
+# Do the insert
+cursor.execute("insert into products(id, name) values ('pyodbc', 'awesome library')")
+#commit the transaction
+cnxn.commit()
+or better using parameters
+
+cursor.execute("insert into products(id, name) values (?, ?)", 'pyodbc', 'awesome library')
+cnxn.commit()
