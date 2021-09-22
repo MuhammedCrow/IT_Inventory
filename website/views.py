@@ -11,7 +11,13 @@ def home():
 
 @views.route('/computers')
 def computers():
-    return render_template("computers.html")
+    from .db_connect import connect_sql
+    conx = connect_sql()
+    query = 'Select dbo.make.name, dbo.model.name from dbo.model inner join dbo.make on dbo.make.id = dbo.model.makeId'
+    cursor = conx.cursor()
+    cursor.execute(query)
+    data = cursor.fetchall()
+    return render_template("computers.html", data=data)
 
 
 @views.route('/monitors')
@@ -73,12 +79,48 @@ def issueCon():
 def addComputer():
     snumber = request.form.get('snumber')
     model = request.form.get('model')
-    condition = request.form.get('condition')
+    category1 = request.form.get('category')
+    condition1 = request.form.get('condition')
+    condition = 0
+    category = 0
+    print(condition1)
+    if condition1 == 'New':
+        condition = 1
+    elif condition1 == 'Used':
+        condition = 2
+    else:
+        condition = 3
+
+    if category1 == 'Desktop':
+        category = 4
+    else:
+        category = 3
+    print(condition)
+    print(category)
     from .db_connect import connect_sql
     conx = connect_sql()
-    query = 'insert into hardware(serialNumber, categoryId, makeAndModel,'
+    query = 'insert into hardware(serialNumber, categoryId, makeAndModel, condition) values (?,?,?,?)'
     cursor = conx.cursor()
-    cursor.execute(query, amount, model)
+    cursor.execute(query, snumber, category, 2, condition)
     conx.commit()
     conx.close()
-    return redirect('/cartridges')
+    return redirect('/computers')
+
+
+@views.route('/issueComputer', methods=['GET', 'POST'])
+def issueComputer():
+    snumber = request.form.get('snumber')
+    useremail = request.form.get('user')
+    date = request.form.get('date')
+    from .db_connect import connect_sql
+    conx = connect_sql()
+    getuserId = 'select id from dbo.clients where email = ?'
+    query = 'update dbo.hardware set userId = ? , receiveDate = ? where dbo.hardware.serialNumber = ?'
+    cursor = conx.cursor()
+    cursor.execute(getuserId, useremail)
+    data = cursor.fetchall()
+    userId = data[0][0]
+    cursor.execute(query, userId, date, snumber)
+    conx.commit()
+    conx.close()
+    return redirect('/computers')
