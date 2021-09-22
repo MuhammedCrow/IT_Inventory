@@ -35,3 +35,11 @@ or better using parameters
 
 cursor.execute("insert into products(id, name) values (?, ?)", 'pyodbc', 'awesome library')
 cnxn.commit()
+
+// make and model fetch
+from .db_connect import connect_sql
+    conx = connect_sql()
+    query = 'Select dbo.make.name, dbo.model.name, dbo.model.id from dbo.model inner join dbo.make on dbo.make.id = dbo.model.makeId'
+    cursor = conx.cursor()
+    cursor.execute(query)
+    data = cursor.fetchall()
