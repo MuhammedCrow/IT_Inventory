@@ -1,0 +1,16 @@
+{% extends "base.html" %} {% block title %}Clients{% endblock %} {% block content %}
+<div class="border p-md-4 my-5">
+    <form action="/searchClients" method="post">
+        <div class="row mb-3">
+            <input name="user" id="user" type="text" class="form-control ms-auto" placeholder="Search By Email">
+        </div>
+        <div class="row mb-3">
+            <button class="btn btn-primary px-3 col-2 ms-auto text-dark" type="button ">
+                    <h5 class="text-dark">
+                        Search
+                    </h5>
+                </button>
+        </div>
+    </form>
+</div>
+{% endblock %}

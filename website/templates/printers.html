@@ -17,17 +17,18 @@
         <div class="active tab-pane" id="add">
             <h2>Add Printers</h2>
             <div class="my-3">
-                <form action="" method="post">
+                <form action="/addPrinter" method="post">
                     <div class="row mb-3">
                         <div class="col">
                             <label for="model" class="text-light h4">Make & Model</label>
                         </div>
                         <div class="col">
-                            <select id="model" class="form-select ms-auto form-control">
-                                <option selected>Open this select menu</option>
-                                <option value="1">One</option>
-                                <option value="2">Two</option>
-                                <option value="3">Three</option>
+                            <select name="model" id="model" class="form-select ms-auto form-control">
+                                {% for row in data%}
+                                <option>
+                                    {{ row[0] + ' ' + row[1]}}
+                                </option>
+                                {% endfor %}
                               </select>
                         </div>
                     </div>
@@ -36,10 +37,11 @@
                             <label for="condition" class="text-light h4">Condition</label>
                         </div>
                         <div class="col">
-                            <select id="condition" class="form-select ms-auto form-control">
+                            <select name="condition" id="condition" class="form-select ms-auto form-control">
                                 <option selected>Select Condition </option>
-                                <option value="1">New</option>
-                                <option value="2">Used</option>
+                                <option>New</option>
+                                <option>Used</option>
+                                <option>Damaged</option>
                               </select>
                         </div>
                     </div>
@@ -48,7 +50,7 @@
                             <label for="snumber" class="text-light h4">Serial Number</label>
                         </div>
                         <div class="col">
-                            <input id="snumber" type="text" class="form-control ms-auto">
+                            <input name="snumber" id="snumber" type="text" class="form-control ms-auto">
                         </div>
                     </div>
                     <div class="row mb-3">
@@ -64,35 +66,13 @@
         <div class="tab-pane" id="issue">
             <h2>Issue Printers</h2>
             <div class="my-3">
-                <form action="" method="post">
+                <form action="/issuePrinter" method="post">
                     <div class="row mb-3">
                         <div class="col">
                             <label for="snumber" class="text-light h4">Serial Number</label>
                         </div>
                         <div class="col">
-                            <input id="snumber" type="text" class="form-control ms-auto">
-                        </div>
-                    </div>
-                    <div class="row mb-3">
-                        <div class="col">
-                            <label for="model" class="text-light h4">Make & Model</label>
-                        </div>
-                        <div class="col">
-                            <select id="model" class="form-select ms-auto form-control" disabled>
-                                <option selected>Open this select menu</option>
-                              </select>
-                        </div>
-                    </div>
-                    <div class="row mb-3">
-                        <div class="col">
-                            <label for="condition" class="text-light h4">Condition</label>
-                        </div>
-                        <div class="col">
-                            <select id="condition" class="form-select ms-auto form-control" disabled>
-                                <option selected>Select Condition </option>
-                                <option value="1">New</option>
-                                <option value="2">Used</option>
-                              </select>
+                            <input name="snumber" id="snumber" type="text" class="form-control ms-auto">
                         </div>
                     </div>
                     <div class="row mb-3">
@@ -100,7 +80,7 @@
                             <label for="user" class="text-light h4">User Email</label>
                         </div>
                         <div class="col">
-                            <input id="user" type="text" class="form-control ms-auto">
+                            <input name="user" id="user" type="text" class="form-control ms-auto">
                         </div>
                     </div>
                     <div class="row mb-3">
@@ -108,7 +88,7 @@
                             <label for="date" class="text-light h4">Receive Date</label>
                         </div>
                         <div class="col">
-                            <input id="date" type="date" class="form-control ms-auto">
+                            <input name="date" id="date" type="date" class="form-control ms-auto">
                         </div>
                     </div>
                     <div class="row mb-3">

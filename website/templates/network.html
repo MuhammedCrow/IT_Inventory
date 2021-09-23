@@ -17,17 +17,18 @@
         <div class="active tab-pane" id="add">
             <h2>Add Network Devices</h2>
             <div class="my-3">
-                <form action="" method="post">
+                <form action="/addNetwork" method="post">
                     <div class="row mb-3">
                         <div class="col">
                             <label for="model" class="text-light h4">Make & Model</label>
                         </div>
                         <div class="col">
-                            <select id="model" class="form-select ms-auto form-control">
-                                <option selected>Open this select menu</option>
-                                <option value="1">One</option>
-                                <option value="2">Two</option>
-                                <option value="3">Three</option>
+                            <select name="model" id="model" class="form-select ms-auto form-control">
+                                {% for row in data%}
+                                <option>
+                                    {{ row[0] + ' ' + row[1]}}
+                                </option>
+                                {% endfor %}
                               </select>
                         </div>
                     </div>
@@ -37,9 +38,9 @@
                         </div>
                         <div class="col">
                             <select id="condition" class="form-select ms-auto form-control">
-                                <option selected>Select Condition </option>
-                                <option value="1">New</option>
-                                <option value="2">Used</option>
+                                <option>New</option>
+                                <option>Used</option>
+                                <option>Damaged</option>
                               </select>
                         </div>
                     </div>
@@ -48,8 +49,11 @@
                             <label for="type" class="text-light h4">Catagory</label>
                         </div>
                         <div class="col">
-                            <select id="type" class="form-select ms-auto form-control">
-                                <option selected>Select Catagory</option>
+                            <select name="category" id="category" class="form-select ms-auto form-control">
+                                <option selected>Access Point</option>
+                                <option>Hub</option>
+                                <option >NanoStation</option>
+                                <option>Switch</option>
                               </select>
                         </div>
                     </div>
@@ -58,7 +62,7 @@
                             <label for="snumber" class="text-light h4">Serial Number</label>
                         </div>
                         <div class="col">
-                            <input id="snumber" type="text" class="form-control ms-auto">
+                            <input name="snumber" id="snumber" type="text" class="form-control ms-auto">
                         </div>
                     </div>
                     <div class="row mb-3">
@@ -74,45 +78,13 @@
         <div class="tab-pane" id="issue">
             <h2>Issue Network Devices</h2>
             <div class="my-3">
-                <form action="" method="post">
+                <form action="/issueNetwork" method="post">
                     <div class="row mb-3">
                         <div class="col">
                             <label for="snumber" class="text-light h4">Serial Number</label>
                         </div>
                         <div class="col">
-                            <input id="snumber" type="text" class="form-control ms-auto">
-                        </div>
-                    </div>
-                    <div class="row mb-3">
-                        <div class="col">
-                            <label for="model" class="text-light h4">Make & Model</label>
-                        </div>
-                        <div class="col">
-                            <select id="model" class="form-select ms-auto form-control" disabled>
-                                <option selected>Open this select menu</option>
-                              </select>
-                        </div>
-                    </div>
-                    <div class="row mb-3">
-                        <div class="col">
-                            <label for="condition" class="text-light h4">Condition</label>
-                        </div>
-                        <div class="col">
-                            <select id="condition" class="form-select ms-auto form-control" disabled>
-                                <option selected>Select Condition </option>
-                                <option value="1">New</option>
-                                <option value="2">Used</option>
-                              </select>
-                        </div>
-                    </div>
-                    <div class="row mb-3">
-                        <div class="col">
-                            <label for="type" class="text-light h4">Catagory</label>
-                        </div>
-                        <div class="col">
-                            <select id="type" class="form-select ms-auto form-control" disabled>
-                                <option selected>Select Catagory </option>
-                              </select>
+                            <input name="snumber" id="snumber" type="text" class="form-control ms-auto">
                         </div>
                     </div>
                     <div class="row mb-3">
@@ -120,7 +92,7 @@
                             <label for="user" class="text-light h4">User Email</label>
                         </div>
                         <div class="col">
-                            <input id="user" type="text" class="form-control ms-auto">
+                            <input name="user" id="user" type="text" class="form-control ms-auto">
                         </div>
                     </div>
                     <div class="row mb-3">
@@ -128,7 +100,7 @@
                             <label for="date" class="text-light h4">Receive Date</label>
                         </div>
                         <div class="col">
-                            <input id="date" type="date" class="form-control ms-auto">
+                            <input nmae="date" id="date" type="date" class="form-control ms-auto">
                         </div>
                     </div>
                     <div class="row mb-3">

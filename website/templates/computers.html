@@ -24,7 +24,6 @@
                         </div>
                         <div class="col">
                             <select name="model" id="model" class="form-select ms-auto form-control">
-                                <option selected>Open this select menu</option>
                                 {% for row in data%}
                                 <option>
                                     {{ row[0] + ' ' + row[1]}}
@@ -39,7 +38,6 @@
                         </div>
                         <div class="col">
                             <select name="category" id="category" class="form-select ms-auto form-control">
-                                <option selected>Select Category</option>
                                 <option>Desktop</option>
                                 <option>Laptop</option>
                               </select>
