@@ -12,5 +12,26 @@
                 </button>
         </div>
     </form>
+    <table class="table text-light">
+        <thead>
+            <tr>
+                <th scope="col">Serial Number</th>
+                <th scope="col">Recieve Date</th>
+                <th scope="col">Model</th>
+                <th scope="col">Device Category</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for row in data %}
+            <tr>
+                {% for cell in row %}
+                <td>
+                    {{ cell }}
+                </td>
+                {% endfor %}
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
 </div>
 {% endblock %}

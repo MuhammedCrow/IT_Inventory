@@ -2,6 +2,10 @@ from flask import Blueprint, render_template, request
 from werkzeug.utils import redirect
 
 views = Blueprint('views', __name__)
+results = 0
+hardware = []
+consumables = []
+Gdate = 0
 
 
 def fetchMakeAndModel():
@@ -12,6 +16,19 @@ def fetchMakeAndModel():
     cursor.execute(query)
     data = cursor.fetchall()
     return data
+
+
+def addToCart(snumber):
+    from .db_connect import connect_sql
+    conx = connect_sql()
+    cursor = conx.cursor()
+    fetchQuery = 'SELECT dbo.hardware.serialNumber, dbo.hardware.receiveDate, dbo.make.name, dbo.model.name from dbo.hardware INNER JOIN dbo.model on dbo.hardware.makeAndModel = dbo.model.id INNER JOIN dbo.make on dbo.model.makeId = dbo.make.id INNER JOIN dbo.consumableCat on dbo.hardware.categoryId = dbo.consumableCat.id where dbo.hardware.serialNumber = ? order by dbo.hardware.receiveDate asc;'
+    cursor.execute(fetchQuery, snumber)
+    hd = cursor.fetchall()
+    for row in hd:
+        global hardware
+        hardware.append(row)
+    conx.close()
 
 
 @views.route('/')
@@ -50,12 +67,8 @@ def network():
 
 @views.route('/cartridges')
 def cartridges():
-    from .db_connect import connect_sql
-    conx = connect_sql()
-    query = 'select name from consumable where makeAndModle = 1'
-    cursor = conx.cursor()
-    cursor.execute(query)
-    data = cursor.fetchall()
+    data = fetchMakeAndModel()
+    print(data)
     return render_template("cartridges.html", data=data)
 
 
@@ -63,11 +76,12 @@ def cartridges():
 def addCon():
     amount = int(request.form.get('amount'))
     model = request.form.get('model')
+    modelname = model.split()[1]
     from .db_connect import connect_sql
     conx = connect_sql()
     query = 'update dbo.consumable SET amount += ? where dbo.consumable.name = ?'
     cursor = conx.cursor()
-    cursor.execute(query, amount, model)
+    cursor.execute(query, amount, modelname)
     conx.commit()
     conx.close()
     return redirect('/cartridges')
@@ -85,6 +99,11 @@ def issueCon():
     cursor.execute(query, amount, model)
     conx.commit()
     conx.close()
+    cons = (model, 'Cartridge', amount)
+    global consumables, Gdate
+    consumables.append(cons)
+    Gdate = date
+
     return redirect('/cartridges')
 
 
@@ -137,6 +156,9 @@ def issueComputer():
     cursor.execute(query, userId, date, snumber)
     conx.commit()
     conx.close()
+    addToCart(snumber)
+    global Gdate
+    Gdate = date
     return redirect('/computers')
 
 
@@ -183,6 +205,9 @@ def issueMonitor():
     cursor.execute(query, userId, date, snumber)
     conx.commit()
     conx.close()
+    addToCart(snumber)
+    global Gdate
+    Gdate = date
     return redirect('/monitors')
 
 
@@ -229,6 +254,9 @@ def issuePrinter():
     cursor.execute(query, userId, date, snumber)
     conx.commit()
     conx.close()
+    addToCart(snumber)
+    global Gdate
+    Gdate = date
     return redirect('/printers')
 
 
@@ -278,6 +306,9 @@ def issueNetwork():
     cursor.execute(query, userId, date, snumber)
     conx.commit()
     conx.close()
+    addToCart(snumber)
+    global Gdate
+    Gdate = date
     return redirect('/network')
 
 
@@ -294,4 +325,19 @@ def searchClients():
     userId = data[0][0]
     cursor.execute(query, userId)
     data = cursor.fetchall()
-    return redirect('clients.html')
+    global results
+    results = data
+    return render_template('/clients.html', data=data)
+
+
+@views.route('/print')
+def printForm():
+    global hardware, Gdate
+    print(hardware)
+    items = hardware
+    hardware = []
+    global consumables
+    items2 = consumables
+    consumables = []
+    print(items)
+    return render_template('/receipt.html', data=items, consume=items2, date=Gdate)
