@@ -1,0 +1,32 @@
+{% extends "base.html" %} {% block title %}Admin Console{% endblock %} {% block content %}
+<div class="border p-md-4 my-5">
+    <div class="border-bottom">
+        <h2>Add Admin</h2>
+        <form action="/addAdmin" method="post">
+            <div class="row mb-3">
+                <div class="col">
+                    <label for="name" class="text-light h4">Username</label>
+                </div>
+                <div class="col">
+                    <input name="name" id="name" type="text" class="form-control ms-auto">
+                </div>
+            </div>
+            <div class="row mb-3">
+                <div class="col">
+                    <label for="pass" class="text-light h4">Password</label>
+                </div>
+                <div class="col">
+                    <input name="pass" id="pass" type="text" class="form-control ms-auto">
+                </div>
+            </div>
+            <div class="row mb-3">
+                <button class="btn btn-primary px-3 col-2 ms-auto text-dark" type="button ">
+                    <h5 class="text-dark">
+                        Submit
+                    </h5>
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

@@ -59,6 +59,11 @@ def printers():
     return render_template("printers.html", data=data)
 
 
+@views.route('/admin')
+def admin():
+    return render_template("adminConsole.html")
+
+
 @views.route('/network')
 def network():
     data = fetchMakeAndModel()
