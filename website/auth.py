@@ -6,9 +6,25 @@ auth = Blueprint('auth', __name__)
 
 @auth.route('/login', methods=['GET', 'POST'])
 def login():
-    data = request.form
-    print(data)
-    return render_template("login.html")
+    if request.method == 'POST':
+        userName = request.form.get('username')
+        password = request.form.get('password')
+        from .db_connect import connect_sql
+        conx = connect_sql()
+        query = 'SELECT username, password from dbo.admin where username = ?'
+        cursor = conx.cursor()
+        cursor.execute(query, userName)
+        row1 = cursor.fetchone()
+        if not row1:
+            return 'no such user'
+        else:
+            if check_password_hash(row1.password, password):
+                return 'Succuss'
+            else:
+                return 'failed'
+
+    else:
+        return render_template("login.html")
 
 
 @auth.route('/addAdmin', methods=['GET', 'POST'])
