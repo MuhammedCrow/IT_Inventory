@@ -1,6 +1,6 @@
 from flask import Blueprint, render_template, request
 from werkzeug.security import generate_password_hash, check_password_hash
-
+from flask_login import login_user, login_required, logout_user, current_user
 auth = Blueprint('auth', __name__)
 
 
@@ -19,7 +19,8 @@ def login():
             return 'no such user'
         else:
             if check_password_hash(row1.password, password):
-                return 'Succuss'
+                login_user(row1)
+                return render_template("home.html")
             else:
                 return 'failed'
 
