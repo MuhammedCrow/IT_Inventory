@@ -2,19 +2,19 @@
 <div class="border p-md-4 my-5">
     <ul class="nav nav-tabs justify-content-end">
         <li class="nav-item">
-            <a class="active activ-dark nav-link px-5 text-" data-bs-toggle="tab" href="#add">
+            <a class="nav-link px-5 text-" data-bs-toggle="tab" href="#add">
                 </i>
                 <h4 class="tab-text">Add</h4>
             </a>
         </li>
         <li class="nav-item">
-            <a class="nav-link px-5" data-bs-toggle="tab" href="#issue">
+            <a class="active activ-dark nav-link px-5" data-bs-toggle="tab" href="#issue">
                 <h4 class="tab-text">Issue</h4>
             </a>
         </li>
     </ul>
     <div class="tab-content  my-5">
-        <div class="active tab-pane" id="add">
+        <div class="tab-pane" id="add">
             <h2>Add Computers</h2>
             <div class="my-3">
                 <form action="/addComputer" method="post">
@@ -65,6 +65,44 @@
                         </div>
                     </div>
                     <div class="row mb-3">
+                        <div class="col-1">
+                            <h3 class="text-primary">Specs</h3>
+                        </div>
+                        <div class="col border-bottom border-primary border-3"></div>
+                    </div>
+                    <div class="row mb-3">
+                        <div class="col">
+                            <label for="cpu" class="text-light h4">Processor</label>
+                        </div>
+                        <div class="col">
+                            <input name="cpu" id="cpu" type="text" class="form-control ms-auto">
+                        </div>
+                    </div>
+                    <div class="row mb-3">
+                        <div class="col">
+                            <label for="ram" class="text-light h4">RAM</label>
+                        </div>
+                        <div class="col">
+                            <input name="ram" id="ram" type="text" class="form-control ms-auto">
+                        </div>
+                    </div>
+                    <div class="row mb-3">
+                        <div class="col">
+                            <label for="srtgType" class="text-light h4">Storage Type</label>
+                        </div>
+                        <div class="col">
+                            <input name="srtgType" id="srtgType" type="text" class="form-control ms-auto">
+                        </div>
+                    </div>
+                    <div class="row mb-3">
+                        <div class="col">
+                            <label for="srtgCap" class="text-light h4">Storage Capacity</label>
+                        </div>
+                        <div class="col">
+                            <input name="srtgCap" id="srtgCap" type="text" class="form-control ms-auto">
+                        </div>
+                    </div>
+                    <div class="row mb-3">
                         <button class="btn btn-primary px-3 col-2 ms-auto text-dark" type="button ">
                             <h5 class="text-dark">
                                 Submit
@@ -74,16 +112,19 @@
                 </form>
             </div>
         </div>
-        <div class="tab-pane" id="issue">
+        <div class="active tab-pane" id="issue">
             <h2>Issue Computers</h2>
             <div class="my-3">
                 <form action="/issueComputer" method="post">
                     <div class="row mb-3">
-                        <div class="col">
+                        <div class="col-6">
                             <label for="snumber" class="text-light h4">Serial Number</label>
                         </div>
-                        <div class="col">
+                        <div class="col-5">
                             <input name="snumber" id="snumber" type="text" class="form-control ms-auto">
+                        </div>
+                        <div class="col-1">
+                            <a href="" class="btn btn-primary text-dark">Check</a>
                         </div>
                     </div>
                     <div class="row mb-3">
@@ -103,6 +144,50 @@
                         </div>
                     </div>
                     <div class="row mb-3">
+                        <div class="col-1">
+                            <h3 class="text-primary">Specs</h3>
+                        </div>
+                        <div class="col border-bottom border-primary border-3"></div>
+                    </div>
+                    <div class="row mb-3">
+                        <div class="col">
+                            <label for="cpu" class="text-light h4">Processor</label>
+                        </div>
+                        <div class="col">
+                            <input name="cpu" id="cpu" type="text" class="form-control ms-auto">
+                        </div>
+                    </div>
+                    <div class="row mb-3">
+                        <div class="col">
+                            <label for="ram" class="text-light h4">RAM</label>
+                        </div>
+                        <div class="col">
+                            <input name="ram" id="ram" type="text" class="form-control ms-auto">
+                        </div>
+                    </div>
+                    <div class="row mb-3">
+                        <div class="col">
+                            <label for="srtgType" class="text-light h4">Storage Type</label>
+                        </div>
+                        <div class="col">
+                            <input name="srtgType" id="srtgType" type="text" class="form-control ms-auto">
+                        </div>
+                    </div>
+                    <div class="row mb-3">
+                        <div class="col">
+                            <label for="srtgCap" class="text-light h4">Storage Capacity</label>
+                        </div>
+                        <div class="col">
+                            <input name="srtgCap" id="srtgCap" type="text" class="form-control ms-auto" value="{{ test }}">
+                        </div>
+                    </div>
+                    <div class="row mb-3">
+                        <div class="col-7"></div>
+                        <a href="" class="btn btn-primary px-3 col-2 ms-auto text-dark">
+                            <h5 class="text-dark">
+                                Return
+                            </h5>
+                        </a>
                         <button class="btn btn-primary px-3 col-2 ms-auto text-dark" type="button ">
                             <h5 class="text-dark">
                                 Submit

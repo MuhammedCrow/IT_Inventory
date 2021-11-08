@@ -1,4 +1,6 @@
 from flask import Blueprint, render_template, request
+from flask.globals import session
+from flask.helpers import url_for
 from werkzeug.utils import redirect
 
 views = Blueprint('views', __name__)
@@ -33,7 +35,11 @@ def addToCart(snumber):
 
 @views.route('/')
 def home():
-    return render_template("home.html")
+    if "user" in session:
+        user = session["user"]
+        return render_template("home.html", user=user)
+    else:
+        return redirect(url_for("auth.login"))
 
 
 @views.route('/clients')

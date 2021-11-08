@@ -1,12 +1,15 @@
-from flask import Blueprint, render_template, request
+from flask import Blueprint, render_template, request, session
+from flask.helpers import url_for
 from werkzeug.security import generate_password_hash, check_password_hash
-from flask_login import login_user, login_required, logout_user, current_user
+from werkzeug.utils import redirect
+# from flask_login import login_user, login_required, logout_user, current_user
 auth = Blueprint('auth', __name__)
 
 
 @auth.route('/login', methods=['GET', 'POST'])
 def login():
     if request.method == 'POST':
+        session.permanent = True
         userName = request.form.get('username')
         password = request.form.get('password')
         from .db_connect import connect_sql
@@ -19,8 +22,8 @@ def login():
             return 'no such user'
         else:
             if check_password_hash(row1.password, password):
-                login_user(row1)
-                return render_template("home.html")
+                session["user"] = row1.username
+                return render_template("home.html", user=row1.username)
             else:
                 return 'failed'
 
@@ -45,4 +48,5 @@ def addAdmin():
 
 @auth.route('/logout')
 def logout():
-    return "<p>logout</p>"
+    session.pop("user", None)
+    return redirect(url_for("auth.login"))
