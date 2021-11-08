@@ -352,3 +352,15 @@ def printForm():
     consumables = []
     print(items)
     return render_template('/receipt.html', data=items, consume=items2, date=Gdate)
+
+
+@views.route('/checkSerial', methods=['GET', 'POST'])
+def checkSerial():
+    serial = request.form.get('snumber')
+    query = 'select * from dbo.specs where serialNumber = ?'
+    from .db_connect import connect_sql
+    conx = connect_sql()
+    cursor = conx.cursor()
+    cursor.execute(query, serial)
+    data = cursor.fetchone()
+    return render_template('/computer', data=data)

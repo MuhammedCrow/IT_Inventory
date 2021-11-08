@@ -124,7 +124,7 @@
                             <input name="snumber" id="snumber" type="text" class="form-control ms-auto">
                         </div>
                         <div class="col-1">
-                            <a href="" class="btn btn-primary text-dark">Check</a>
+                            <a href="/checkSerial" class="btn btn-primary text-dark">Check</a>
                         </div>
                     </div>
                     <div class="row mb-3">
@@ -154,7 +154,7 @@
                             <label for="cpu" class="text-light h4">Processor</label>
                         </div>
                         <div class="col">
-                            <input name="cpu" id="cpu" type="text" class="form-control ms-auto">
+                            <input name="cpu" id="cpu" type="text" class="form-control ms-auto" value="{{ data.cpu }}">
                         </div>
                     </div>
                     <div class="row mb-3">
@@ -162,7 +162,7 @@
                             <label for="ram" class="text-light h4">RAM</label>
                         </div>
                         <div class="col">
-                            <input name="ram" id="ram" type="text" class="form-control ms-auto">
+                            <input name="ram" id="ram" type="text" class="form-control ms-auto" value="{{ data.ram }}">
                         </div>
                     </div>
                     <div class="row mb-3">
@@ -170,7 +170,7 @@
                             <label for="srtgType" class="text-light h4">Storage Type</label>
                         </div>
                         <div class="col">
-                            <input name="srtgType" id="srtgType" type="text" class="form-control ms-auto">
+                            <input name="srtgType" id="srtgType" type="text" class="form-control ms-auto" value="{{ data.storageType }}">
                         </div>
                     </div>
                     <div class="row mb-3">
@@ -178,17 +178,17 @@
                             <label for="srtgCap" class="text-light h4">Storage Capacity</label>
                         </div>
                         <div class="col">
-                            <input name="srtgCap" id="srtgCap" type="text" class="form-control ms-auto" value="{{ test }}">
+                            <input name="srtgCap" id="srtgCap" type="text" class="form-control ms-auto" value="{{ data.storageCapacity }}">
                         </div>
                     </div>
                     <div class="row mb-3">
                         <div class="col-7"></div>
-                        <a href="" class="btn btn-primary px-3 col-2 ms-auto text-dark">
+                        <a href="/returnPC" class="btn btn-primary px-3 col-2 ms-auto text-dark">
                             <h5 class="text-dark">
                                 Return
                             </h5>
                         </a>
-                        <button class="btn btn-primary px-3 col-2 ms-auto text-dark" type="button ">
+                        <button class="btn btn-primary px-3 col-2 ms-auto text-dark" type="button">
                             <h5 class="text-dark">
                                 Submit
                             </h5>
