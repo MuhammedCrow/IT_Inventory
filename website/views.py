@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template, request
+from flask import Blueprint, render_template, request, jsonify
 from flask.globals import session
 from flask.helpers import url_for
 from werkzeug.utils import redirect
