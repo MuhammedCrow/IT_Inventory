@@ -138,6 +138,11 @@ def addComputer():
     else:
         category = 3
     modelname = makeAndModel.split()[1]
+    cpu = request.form.get('cpu')
+    ram = request.form.get('ram')
+    strgType = request.form.get('strgType')
+    strgCap = request.form.get('strgCap')
+    specQuery = 'insert into specs(serialNumber, cpu, ram, strgType, strgCap) values (?,?,?,?,?)'
     from .db_connect import connect_sql
     conx = connect_sql()
     modelquery = 'select id from dbo.model where dbo.model.name = ?'
@@ -146,6 +151,8 @@ def addComputer():
     cursor.execute(modelquery, modelname)
     modelId = cursor.fetchall()[0][0]
     cursor.execute(query, snumber, category, modelId, condition)
+    conx.commit()
+    cursor.execute(specQuery, snumber, cpu, ram, strgType, strgCap)
     conx.commit()
     conx.close()
     return redirect('/computers')
@@ -361,6 +368,6 @@ def checkSerial():
     from .db_connect import connect_sql
     conx = connect_sql()
     cursor = conx.cursor()
-    cursor.execute(query, serial)
+    cursor.execute(query, '1234567ytrewq')
     data = cursor.fetchone()
-    return render_template('/computer', data=data)
+    return render_template('/computers.html', data=data)
