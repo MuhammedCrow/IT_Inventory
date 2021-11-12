@@ -160,24 +160,31 @@ def addComputer():
 
 @views.route('/issueComputer', methods=['GET', 'POST'])
 def issueComputer():
-    snumber = request.form.get('snumber')
-    useremail = request.form.get('user')
-    date = request.form.get('date')
-    from .db_connect import connect_sql
-    conx = connect_sql()
-    getuserId = 'select id from dbo.clients where email = ?'
-    query = 'update dbo.hardware set userId = ? , receiveDate = ? where dbo.hardware.serialNumber = ?'
-    cursor = conx.cursor()
-    cursor.execute(getuserId, useremail)
-    data = cursor.fetchall()
-    userId = data[0][0]
-    cursor.execute(query, userId, date, snumber)
-    conx.commit()
-    conx.close()
-    addToCart(snumber)
-    global Gdate
-    Gdate = date
-    return redirect('/computers')
+    if request.method == 'POST':
+        snumber = request.form.get('snumber1')
+        useremail = request.form.get('user')
+        date = request.form.get('date')
+        cpu = request.form.get('cpu')
+        ram = request.form.get('ram')
+        strgType = request.form.get('strgType')
+        strgCap = request.form.get('strgCap')
+        from .db_connect import connect_sql
+        conx = connect_sql()
+        getuserId = 'select id from dbo.clients where email = ?'
+        query = 'update dbo.hardware set userId = ? , receiveDate = ? where dbo.hardware.serialNumber = ?'
+        specQuery = 'update specs set serialNumber = ?, cpu = ?, ram = ?, strgType = ?, strgCap = ?)'
+        cursor = conx.cursor()
+        cursor.execute(getuserId, useremail)
+        data = cursor.fetchone()
+        userId = data.id
+        cursor.execute(query, userId, date, snumber)
+        cursor.execute(specQuery, cpu, ram, strgType, strgCap)
+        conx.commit()
+        conx.close()
+        addToCart(snumber)
+        global Gdate
+        Gdate = date
+        return redirect('/computers')
 
 
 @views.route('/addMonitor', methods=['GET', 'POST'])
@@ -363,11 +370,12 @@ def printForm():
 
 @views.route('/checkSerial', methods=['GET', 'POST'])
 def checkSerial():
-    serial = request.form.get('snumber')
+    serial = request.get_data()
+    print(serial.decode('ascii'))
     query = 'select * from dbo.specs where serialNumber = ?'
     from .db_connect import connect_sql
     conx = connect_sql()
     cursor = conx.cursor()
-    cursor.execute(query, '1234567ytrewq')
+    cursor.execute(query, serial.decode('ascii'))
     data = cursor.fetchone()
-    return render_template('/computers.html', data=data)
+    return jsonify('', render_template('/specs.html', data=data))

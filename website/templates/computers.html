@@ -121,10 +121,10 @@
                             <label for="snumber" class="text-light h4">Serial Number</label>
                         </div>
                         <div class="col-5">
-                            <input name="snumber" id="snumber" type="text" class="form-control ms-auto">
+                            <input name="snumber1" id="snumber1" type="text" class="form-control ms-auto">
                         </div>
                         <div class="col-1">
-                            <a href="/checkSerial" class="btn btn-primary text-dark">Check</a>
+                            <button type="button" onclick="checkSerial()" class="btn btn-primary text-dark">Check</button>
                         </div>
                     </div>
                     <div class="row mb-3">
@@ -168,7 +168,7 @@
                         </div>
                         <div class="row mb-3">
                             <div class="col">
-                                <label for="srtgType" class="text-light h4">Storage Type</label>
+                                <label for="strgType" class="text-light h4">Storage Type</label>
                             </div>
                             <div class="col">
                                 <input name="strgType" id="strgType" type="text" class="form-control ms-auto" value="{{ data.strgType }}">
@@ -190,7 +190,7 @@
                                 Return
                             </h5>
                         </a>
-                        <button class="btn btn-primary px-3 col-2 ms-auto text-dark" type="button">
+                        <button class="btn btn-primary px-3 col-2 ms-auto text-dark" type="submit">
                             <h5 class="text-dark">
                                 Submit
                             </h5>
