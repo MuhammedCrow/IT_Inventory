@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template, request, jsonify
+from flask import Blueprint, render_template, request, jsonify, flash
 from flask.globals import session
 from flask.helpers import url_for
 from werkzeug.utils import redirect
@@ -44,25 +44,41 @@ def home():
 
 @views.route('/clients')
 def clients():
-    return render_template("clients.html")
+    if "user" in session:
+        user = session["user"]
+        return render_template("clients.html", user=user)
+    else:
+        return redirect(url_for("auth.login"))
 
 
 @views.route('/computers')
 def computers():
-    data = fetchMakeAndModel()
-    return render_template("computers.html", data=data)
+    if "user" in session:
+        user = session["user"]
+        data = fetchMakeAndModel()
+        return render_template("computers.html", data=data, user=user)
+    else:
+        return redirect(url_for("auth.login"))
 
 
 @views.route('/monitors')
 def monitors():
-    data = fetchMakeAndModel()
-    return render_template("monitors.html", data=data)
+    if "user" in session:
+        user = session["user"]
+        data = fetchMakeAndModel()
+        return render_template("monitors.html", data=data, user=user)
+    else:
+        return redirect(url_for("auth.login"))
 
 
 @views.route('/printers')
 def printers():
-    data = fetchMakeAndModel()
-    return render_template("printers.html", data=data)
+    if "user" in session:
+        user = session["user"]
+        data = fetchMakeAndModel()
+        return render_template("printers.html", data=data, user=user)
+    else:
+        return redirect(url_for("auth.login"))
 
 
 @views.route('/admin')
@@ -72,49 +88,61 @@ def admin():
 
 @views.route('/network')
 def network():
-    data = fetchMakeAndModel()
-    return render_template("network.html", data=data)
+    if "user" in session:
+        user = session["user"]
+        data = fetchMakeAndModel()
+        return render_template("network.html", data=data, user=user)
+    else:
+        return redirect(url_for("auth.login"))
 
 
 @views.route('/cartridges')
 def cartridges():
-    data = fetchMakeAndModel()
-    print(data)
-    return render_template("cartridges.html", data=data)
+    if "user" in session:
+        user = session["user"]
+        data = fetchMakeAndModel()
+        return render_template("cartridges.html", data=data, user=user)
+    else:
+        return redirect(url_for("auth.login"))
 
 
 @views.route('/addCon', methods=['GET', 'POST'])
 def addCon():
-    amount = int(request.form.get('amount'))
-    model = request.form.get('model')
-    modelname = model.split()[1]
-    from .db_connect import connect_sql
-    conx = connect_sql()
-    query = 'update dbo.consumable SET amount += ? where dbo.consumable.name = ?'
-    cursor = conx.cursor()
-    cursor.execute(query, amount, modelname)
-    conx.commit()
-    conx.close()
+    try:
+        amount = int(request.form.get('amount'))
+        model = request.form.get('model')
+        modelname = model.split()[1]
+        from .db_connect import connect_sql
+        conx = connect_sql()
+        query = 'update dbo.consumable SET amount += ? where dbo.consumable.name = ?'
+        cursor = conx.cursor()
+        cursor.execute(query, amount, modelname)
+        conx.commit()
+        conx.close()
+    except Exception as e:
+        flash(e, category='error')
     return redirect('/cartridges')
 
 
 @views.route('/issueCon', methods=['GET', 'POST'])
 def issueCon():
-    amount = int(request.form.get('amount'))
-    model = request.form.get('model')
-    date = request.form.get('date')
-    from .db_connect import connect_sql
-    conx = connect_sql()
-    query = 'update dbo.consumable SET amount -= ? where dbo.consumable.name = ?'
-    cursor = conx.cursor()
-    cursor.execute(query, amount, model)
-    conx.commit()
-    conx.close()
-    cons = (model, 'Cartridge', amount)
-    global consumables, Gdate
-    consumables.append(cons)
-    Gdate = date
-
+    try:
+        amount = int(request.form.get('amount'))
+        model = request.form.get('model')
+        date = request.form.get('date')
+        from .db_connect import connect_sql
+        conx = connect_sql()
+        query = 'update dbo.consumable SET amount -= ? where dbo.consumable.name = ?'
+        cursor = conx.cursor()
+        cursor.execute(query, amount, model)
+        conx.commit()
+        conx.close()
+        cons = (model, 'Cartridge', amount)
+        global consumables, Gdate
+        consumables.append(cons)
+        Gdate = date
+    except Exception as e:
+        flash(e, category='error')
     return redirect('/cartridges')
 
 
@@ -378,4 +406,5 @@ def checkSerial():
     cursor = conx.cursor()
     cursor.execute(query, serial.decode('ascii'))
     data = cursor.fetchone()
+    print(data)
     return jsonify('', render_template('/specs.html', data=data))
