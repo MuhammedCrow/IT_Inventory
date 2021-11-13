@@ -52,4 +52,5 @@ def addAdmin():
 @auth.route('/logout')
 def logout():
     session.pop("user", None)
+    flash('Logout Successful', category='success')
     return redirect(url_for("auth.login"))

@@ -1,0 +1,23 @@
+{% extends "base.html" %} {% block title %}Reports{% endblock %} {% block content %}
+<div class="text-center">
+    <div class="row my-5">
+        <a href="/computers" class="btn btn-default col text-light home-items">
+            <div class="h1 mb-3">
+                <i class="bi bi-laptop"></i>
+            </div>
+            <h4>Computers</h4>
+        </a>
+        <a href="/monitors" class="btn btn-default col text-light home-items">
+            <div class="h1 mb-3">
+                <i class="bi bi-display"></i>
+            </div>
+            <h4>Monitors</h4>
+        </a>
+        <a href="/printers" class="btn btn-default col text-light home-items">
+            <div class="h1 mb-3">
+                <i class="bi bi-printer"></i>
+            </div>
+            <h4>Printers</h4>
+        </a>
+    </div>
+    {% endblock %}

@@ -8,7 +8,9 @@ def create_app():
     app.permanent_session_lifetime = timedelta(days=5)
     from .views import views
     from .auth import auth
+    from .reports import reports
 
     app.register_blueprint(views, url_prefix='/')
     app.register_blueprint(auth, url_prefix='/')
+    app.register_blueprint(reports, url_prefix='/')
     return app

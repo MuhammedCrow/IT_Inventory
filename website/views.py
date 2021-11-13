@@ -17,6 +17,17 @@ def fetchMakeAndModel():
     cursor = conx.cursor()
     cursor.execute(query)
     data = cursor.fetchall()
+
+    return data
+
+
+def fetchCategory():
+    from .db_connect import connect_sql
+    conx = connect_sql()
+    query = 'Select name from consumableCat'
+    cursor = conx.cursor()
+    cursor.execute(query)
+    data = cursor.fetchall()
     return data
 
 
@@ -40,6 +51,17 @@ def home():
         return render_template("home.html", user=user)
     else:
         return redirect(url_for("auth.login"))
+
+
+@views.route('/requests')
+def requests():
+    return render_template('requests.html')
+
+
+@views.route('/other')
+def other():
+    cat = fetchCategory()
+    return render_template('others.html', data=cat)
 
 
 @views.route('/clients')
@@ -202,7 +224,7 @@ def issueComputer():
         getuserId = 'select id from dbo.clients where email = ?'
         query = 'update dbo.hardware set userId = ? , receiveDate = ? where dbo.hardware.serialNumber = ?'
         specQuery = 'update specs set serialNumber = ?, cpu = ?, ram = ?, strgType = ?, strgCap = ?)'
-        try:    
+        try:
             from .db_connect import connect_sql
             conx = connect_sql()
             cursor = conx.cursor()
@@ -442,7 +464,7 @@ def checkSerial():
             flash('Serial Not Found', category='error')
             return render_template("computers.html")
         else:
-          return jsonify('', render_template('/specs.html', data=data))
+            return jsonify('', render_template('/specs.html', data=data))
     except Exception as e:
         flash(e, category='error')
         return render_template("computers.html")

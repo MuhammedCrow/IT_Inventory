@@ -1,9 +1,8 @@
-{% extends "base.html" %} {% block title %}Cartridges{% endblock %} {% block content %}
+{% extends "base.html" %} {% block title %}Others{% endblock %} {% block content %}
 <div class="border p-md-4 my-5">
     <ul class="nav nav-tabs justify-content-end">
         <li class="nav-item">
             <a class="active activ-dark nav-link px-5 text-" data-bs-toggle="tab" href="#add">
-                </i>
                 <h4 class="tab-text">Add</h4>
             </a>
         </li>
@@ -15,21 +14,21 @@
     </ul>
     <div class="tab-content  my-5">
         <div class="active tab-pane" id="add">
-            <h2>Add Cartridges</h2>
+            <h2>Add Misc.</h2>
             <div class="my-3">
                 <form action="/addCon" method="post">
                     <div class="row mb-3">
                         <div class="col">
-                            <label for="model" class="text-light h4">Cartridge Model</label>
+                            <label for="category" class="text-light h4">Category</label>
                         </div>
                         <div class="col">
-                            <select name="model" id="model" class="form-select ms-auto form-control">
+                            <select name="category" id="category" class="form-select ms-auto form-control">
                                 {% for row in data%}
                                 <option>
-                                    {{ row[0] + ' ' + row[1]}}
+                                    {{ row.name }}
                                 </option>
                                 {% endfor %}
-                              </select>
+                            </select>
                         </div>
                     </div>
                     <div class="row mb-3">
@@ -41,7 +40,7 @@
                         </div>
                     </div>
                     <div class="row mb-3">
-                        <button class="btn btn-primary px-3 col-2 ms-auto text-dark" type="button ">
+                        <button class="btn btn-primary px-3 col-2 ms-auto text-dark" type="button">
                             <h5 class="text-dark">
                                 Submit
                             </h5>
@@ -51,18 +50,18 @@
             </div>
         </div>
         <div class="tab-pane" id="issue">
-            <h2>Issue Cartridges</h2>
+            <h2>Issue Misc.</h2>
             <div class="my-3">
                 <form action="/issueCon" method="post">
                     <div class="row mb-3">
                         <div class="col">
-                            <label for="model" class="text-light h4">Cartridge Model</label>
+                            <label for="category" class="text-light h4">Category</label>
                         </div>
                         <div class="col">
-                            <select name="model" id="model" class="form-select ms-auto form-control">
+                            <select name="category" id="category" class="form-select ms-auto form-control">
                                 {% for row in data%}
                                 <option>
-                                    {{ row[0] + ' ' + row[1]}}
+                                    {{ row.name }}
                                 </option>
                                 {% endfor %}
                             </select>
