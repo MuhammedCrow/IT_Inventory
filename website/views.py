@@ -171,18 +171,21 @@ def addComputer():
     strgType = request.form.get('strgType')
     strgCap = request.form.get('strgCap')
     specQuery = 'insert into specs(serialNumber, cpu, ram, strgType, strgCap) values (?,?,?,?,?)'
-    from .db_connect import connect_sql
-    conx = connect_sql()
     modelquery = 'select id from dbo.model where dbo.model.name = ?'
     query = 'insert into hardware(serialNumber, categoryId, makeAndModel, condition) values (?,?,?,?)'
-    cursor = conx.cursor()
-    cursor.execute(modelquery, modelname)
-    modelId = cursor.fetchall()[0][0]
-    cursor.execute(query, snumber, category, modelId, condition)
-    conx.commit()
-    cursor.execute(specQuery, snumber, cpu, ram, strgType, strgCap)
-    conx.commit()
-    conx.close()
+    try:
+        from .db_connect import connect_sql
+        conx = connect_sql()
+        cursor = conx.cursor()
+        cursor.execute(modelquery, modelname)
+        modelId = cursor.fetchall()[0][0]
+        cursor.execute(query, snumber, category, modelId, condition)
+        conx.commit()
+        cursor.execute(specQuery, snumber, cpu, ram, strgType, strgCap)
+        conx.commit()
+        conx.close()
+    except Exception as e:
+        flash(e, category='error')
     return redirect('/computers')
 
 
@@ -196,22 +199,25 @@ def issueComputer():
         ram = request.form.get('ram')
         strgType = request.form.get('strgType')
         strgCap = request.form.get('strgCap')
-        from .db_connect import connect_sql
-        conx = connect_sql()
         getuserId = 'select id from dbo.clients where email = ?'
         query = 'update dbo.hardware set userId = ? , receiveDate = ? where dbo.hardware.serialNumber = ?'
         specQuery = 'update specs set serialNumber = ?, cpu = ?, ram = ?, strgType = ?, strgCap = ?)'
-        cursor = conx.cursor()
-        cursor.execute(getuserId, useremail)
-        data = cursor.fetchone()
-        userId = data.id
-        cursor.execute(query, userId, date, snumber)
-        cursor.execute(specQuery, cpu, ram, strgType, strgCap)
-        conx.commit()
-        conx.close()
-        addToCart(snumber)
-        global Gdate
-        Gdate = date
+        try:    
+            from .db_connect import connect_sql
+            conx = connect_sql()
+            cursor = conx.cursor()
+            cursor.execute(getuserId, useremail)
+            data = cursor.fetchone()
+            userId = data.id
+            cursor.execute(query, userId, date, snumber)
+            cursor.execute(specQuery, cpu, ram, strgType, strgCap)
+            conx.commit()
+            conx.close()
+            addToCart(snumber)
+            global Gdate
+            Gdate = date
+        except Exception as e:
+            flash(e, category='error')
         return redirect('/computers')
 
 
@@ -229,16 +235,19 @@ def addMonitor():
     else:
         condition = 3
     modelname = makeAndModel.split()[1]
-    from .db_connect import connect_sql
-    conx = connect_sql()
-    modelquery = 'select id from dbo.model where dbo.model.name = ?'
-    query = 'insert into hardware(serialNumber, categoryId, makeAndModel, condition) values (?,?,?,?)'
-    cursor = conx.cursor()
-    cursor.execute(modelquery, modelname)
-    modelId = cursor.fetchall()[0][0]
-    cursor.execute(query, snumber, category, modelId, condition)
-    conx.commit()
-    conx.close()
+    try:
+        from .db_connect import connect_sql
+        conx = connect_sql()
+        modelquery = 'select id from dbo.model where dbo.model.name = ?'
+        query = 'insert into hardware(serialNumber, categoryId, makeAndModel, condition) values (?,?,?,?)'
+        cursor = conx.cursor()
+        cursor.execute(modelquery, modelname)
+        modelId = cursor.fetchall()[0][0]
+        cursor.execute(query, snumber, category, modelId, condition)
+        conx.commit()
+        conx.close()
+    except Exception as e:
+        flash(e, category='error')
     return redirect('/monitors')
 
 
@@ -247,20 +256,23 @@ def issueMonitor():
     snumber = request.form.get('snumber')
     useremail = request.form.get('user')
     date = request.form.get('date')
-    from .db_connect import connect_sql
-    conx = connect_sql()
     getuserId = 'select id from dbo.clients where email = ?'
     query = 'update dbo.hardware set userId = ? , receiveDate = ? where dbo.hardware.serialNumber = ?'
-    cursor = conx.cursor()
-    cursor.execute(getuserId, useremail)
-    data = cursor.fetchall()
-    userId = data[0][0]
-    cursor.execute(query, userId, date, snumber)
-    conx.commit()
-    conx.close()
-    addToCart(snumber)
-    global Gdate
-    Gdate = date
+    try:
+        from .db_connect import connect_sql
+        conx = connect_sql()
+        cursor = conx.cursor()
+        cursor.execute(getuserId, useremail)
+        data = cursor.fetchall()
+        userId = data[0][0]
+        cursor.execute(query, userId, date, snumber)
+        conx.commit()
+        conx.close()
+        addToCart(snumber)
+        global Gdate
+        Gdate = date
+    except Exception as e:
+        flash(e, category='error')
     return redirect('/monitors')
 
 
@@ -278,16 +290,19 @@ def addPrinter():
     else:
         condition = 3
     modelname = makeAndModel.split()[1]
-    from .db_connect import connect_sql
-    conx = connect_sql()
     modelquery = 'select id from dbo.model where dbo.model.name = ?'
     query = 'insert into hardware(serialNumber, categoryId, makeAndModel, condition) values (?,?,?,?)'
-    cursor = conx.cursor()
-    cursor.execute(modelquery, modelname)
-    modelId = cursor.fetchall()[0][0]
-    cursor.execute(query, snumber, category, modelId, condition)
-    conx.commit()
-    conx.close()
+    try:
+        from .db_connect import connect_sql
+        conx = connect_sql()
+        cursor = conx.cursor()
+        cursor.execute(modelquery, modelname)
+        modelId = cursor.fetchall()[0][0]
+        cursor.execute(query, snumber, category, modelId, condition)
+        conx.commit()
+        conx.close()
+    except Exception as e:
+        flash(e, category='error')
     return redirect('/printers')
 
 
@@ -300,16 +315,19 @@ def issuePrinter():
     conx = connect_sql()
     getuserId = 'select id from dbo.clients where email = ?'
     query = 'update dbo.hardware set userId = ? , receiveDate = ? where dbo.hardware.serialNumber = ?'
-    cursor = conx.cursor()
-    cursor.execute(getuserId, useremail)
-    data = cursor.fetchall()
-    userId = data[0][0]
-    cursor.execute(query, userId, date, snumber)
-    conx.commit()
-    conx.close()
-    addToCart(snumber)
-    global Gdate
-    Gdate = date
+    try:
+        cursor = conx.cursor()
+        cursor.execute(getuserId, useremail)
+        data = cursor.fetchall()
+        userId = data[0][0]
+        cursor.execute(query, userId, date, snumber)
+        conx.commit()
+        conx.close()
+        addToCart(snumber)
+        global Gdate
+        Gdate = date
+    except Exception as e:
+        flash(e, category='error')
     return redirect('/printers')
 
 
@@ -327,19 +345,22 @@ def addNetwork():
     else:
         condition = 3
     modelname = makeAndModel.split()[1]
-    from .db_connect import connect_sql
-    conx = connect_sql()
     modelquery = 'select id from dbo.model where dbo.model.name = ?'
     catquery = 'select id from dbo.consumableCat where dbo.consumableCat.name = ?'
     query = 'insert into hardware(serialNumber, categoryId, makeAndModel, condition) values (?,?,?,?)'
-    cursor = conx.cursor()
-    cursor.execute(modelquery, modelname)
-    modelId = cursor.fetchall()[0][0]
-    cursor.execute(catquery, catname)
-    category = cursor.fetchall()[0][0]
-    cursor.execute(query, snumber, category, modelId, condition)
-    conx.commit()
-    conx.close()
+    try:
+        from .db_connect import connect_sql
+        conx = connect_sql()
+        cursor = conx.cursor()
+        cursor.execute(modelquery, modelname)
+        modelId = cursor.fetchall()[0][0]
+        cursor.execute(catquery, catname)
+        category = cursor.fetchall()[0][0]
+        cursor.execute(query, snumber, category, modelId, condition)
+        conx.commit()
+        conx.close()
+    except Exception as e:
+        flash(e, category='error')
     return redirect('/network')
 
 
@@ -348,20 +369,23 @@ def issueNetwork():
     snumber = request.form.get('snumber')
     useremail = request.form.get('user')
     date = request.form.get('date')
-    from .db_connect import connect_sql
-    conx = connect_sql()
     getuserId = 'select id from dbo.clients where email = ?'
     query = 'update dbo.hardware set userId = ? , receiveDate = ? where dbo.hardware.serialNumber = ?'
-    cursor = conx.cursor()
-    cursor.execute(getuserId, useremail)
-    data = cursor.fetchall()
-    userId = data[0][0]
-    cursor.execute(query, userId, date, snumber)
-    conx.commit()
-    conx.close()
-    addToCart(snumber)
-    global Gdate
-    Gdate = date
+    try:
+        from .db_connect import connect_sql
+        conx = connect_sql()
+        cursor = conx.cursor()
+        cursor.execute(getuserId, useremail)
+        data = cursor.fetchall()
+        userId = data[0][0]
+        cursor.execute(query, userId, date, snumber)
+        conx.commit()
+        conx.close()
+        addToCart(snumber)
+        global Gdate
+        Gdate = date
+    except Exception as e:
+        flash(e, category='error')
     return redirect('/network')
 
 
@@ -370,17 +394,25 @@ def searchClients():
     useremail = request.form.get('user')
     getuserId = 'select id from dbo.clients where email = ?'
     query = 'SELECT dbo.hardware.serialNumber, dbo.hardware.receiveDate, dbo.model.name, dbo.consumableCat.name from dbo.hardware INNER JOIN dbo.model on dbo.hardware.makeAndModel = dbo.model.id INNER JOIN dbo.consumableCat on dbo.hardware.categoryId = dbo.consumableCat.id where dbo.hardware.userId = ? order by dbo.hardware.receiveDate asc;'
-    from .db_connect import connect_sql
-    conx = connect_sql()
-    cursor = conx.cursor()
-    cursor.execute(getuserId, useremail)
-    data = cursor.fetchall()
-    userId = data[0][0]
-    cursor.execute(query, userId)
-    data = cursor.fetchall()
-    global results
-    results = data
-    return render_template('/clients.html', data=data)
+    try:
+        from .db_connect import connect_sql
+        conx = connect_sql()
+        cursor = conx.cursor()
+        cursor.execute(getuserId, useremail)
+        data = cursor.fetchone()
+        if not data:
+            flash('User Not Found', category='error')
+            return render_template('/clients.html')
+        else:
+            userId = data.id
+            cursor.execute(query, userId)
+            data = cursor.fetchall()
+            global results
+            results = data
+            return render_template('/clients.html', data=data)
+    except Exception as e:
+        flash(e, category='error')
+        return render_template('/clients.html')
 
 
 @views.route('/print')
@@ -398,13 +430,19 @@ def printForm():
 
 @views.route('/checkSerial', methods=['GET', 'POST'])
 def checkSerial():
-    serial = request.get_data()
-    print(serial.decode('ascii'))
-    query = 'select * from dbo.specs where serialNumber = ?'
-    from .db_connect import connect_sql
-    conx = connect_sql()
-    cursor = conx.cursor()
-    cursor.execute(query, serial.decode('ascii'))
-    data = cursor.fetchone()
-    print(data)
-    return jsonify('', render_template('/specs.html', data=data))
+    try:
+        serial = request.get_data()
+        query = 'select * from dbo.specs where serialNumber = ?'
+        from .db_connect import connect_sql
+        conx = connect_sql()
+        cursor = conx.cursor()
+        cursor.execute(query, serial.decode('ascii'))
+        data = cursor.fetchone()
+        if not data:
+            flash('Serial Not Found', category='error')
+            return render_template("computers.html")
+        else:
+          return jsonify('', render_template('/specs.html', data=data))
+    except Exception as e:
+        flash(e, category='error')
+        return render_template("computers.html")

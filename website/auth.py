@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template, request, session
+from flask import Blueprint, render_template, request, session, flash
 from flask.helpers import url_for
 from werkzeug.security import generate_password_hash, check_password_hash
 from werkzeug.utils import redirect
@@ -19,13 +19,16 @@ def login():
         cursor.execute(query, userName)
         row1 = cursor.fetchone()
         if not row1:
-            return 'no such user'
+            flash('User Not Found', category='error')
+            return render_template("login.html")
         else:
             if check_password_hash(row1.password, password):
                 session["user"] = row1.username
+                flash('Log in Successful', category='success')
                 return render_template("home.html", user=row1.username)
             else:
-                return 'failed'
+                flash('Wrong Password', category='error')
+                return render_template("login.html")
 
     else:
         return render_template("login.html")
