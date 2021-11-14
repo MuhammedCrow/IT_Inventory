@@ -16,9 +16,7 @@ def fetchMakeAndModel():
     query = 'Select dbo.make.name, dbo.model.name from dbo.model inner join dbo.make on dbo.make.id = dbo.model.makeId'
     cursor = conx.cursor()
     cursor.execute(query)
-    data = cursor.fetchall()
-
-    return data
+    return cursor.fetchall()
 
 
 def fetchCategory():
@@ -27,8 +25,7 @@ def fetchCategory():
     query = 'Select name from consumableCat'
     cursor = conx.cursor()
     cursor.execute(query)
-    data = cursor.fetchall()
-    return data
+    return cursor.fetchall()
 
 
 def addToCart(snumber):
@@ -46,16 +43,53 @@ def addToCart(snumber):
 
 @views.route('/')
 def home():
-    if "user" in session:
-        user = session["user"]
-        return render_template("home.html", user=user)
-    else:
+    if "user" not in session:
         return redirect(url_for("auth.login"))
 
+    user = session["user"]
+    return render_template("home.html", user=user)
 
-@views.route('/requests')
+
+@views.route('/requests', methods=['GET', 'POST'])
 def requests():
-    return render_template('requests.html')
+    if "user" not in session:
+        return redirect(url_for("auth.login"))
+    if request.method == 'GET':
+        getReq = 'Select * from requests'
+        headings = ('Requested Item', 'requested By', 'Status',
+                    'PR Number', 'PO Number', 'Request Data', 'Recieve Data', )
+        try:
+            from .db_connect import connect_sql
+            conx = connect_sql()
+            cursor = conx.cursor()
+            cursor.execute(getReq)
+            data = cursor.fetchall()
+            conx.close()
+            cat = fetchCategory()
+            return render_template('requests.html', headings=headings, data=data, category=cat)
+        except Exception as e:
+            flash(e, category='error')
+    else:
+        userEmail = request.form.get('user')
+        catName = request.form.get('category')
+        getCat = 'select id from consumableCat where name = ?'
+        getUser = 'select id from clients where email = ?'
+        query = 'insert into requests requests(requestedItem, requestedFor, status) values(?,?,?)'
+        try:
+            from .db_connect import connect_sql
+            conx = connect_sql()
+            cursor = conx.cursor()
+            cursor.execute(getCat, catName)
+            cat = cursor.fetchone()
+            cursor.execute(getUser, userEmail)
+            user = cursor.fetchone()
+            cursor.execute(query, cat, user, 1)
+            cursor.commit()
+            conx.close()
+            return redirect(url_for("views.requests"))
+        except Exception as e:
+            flash(str(e), category='error')
+            return redirect(url_for("views.requests"))
 
 
 @views.route('/other')
@@ -66,41 +100,41 @@ def other():
 
 @views.route('/clients')
 def clients():
-    if "user" in session:
-        user = session["user"]
-        return render_template("clients.html", user=user)
-    else:
+    if "user" not in session:
         return redirect(url_for("auth.login"))
+
+    user = session["user"]
+    return render_template("clients.html", user=user)
 
 
 @views.route('/computers')
 def computers():
-    if "user" in session:
-        user = session["user"]
-        data = fetchMakeAndModel()
-        return render_template("computers.html", data=data, user=user)
-    else:
+    if "user" not in session:
         return redirect(url_for("auth.login"))
+
+    user = session["user"]
+    data = fetchMakeAndModel()
+    return render_template("computers.html", data=data, user=user)
 
 
 @views.route('/monitors')
 def monitors():
-    if "user" in session:
-        user = session["user"]
-        data = fetchMakeAndModel()
-        return render_template("monitors.html", data=data, user=user)
-    else:
+    if "user" not in session:
         return redirect(url_for("auth.login"))
+
+    user = session["user"]
+    data = fetchMakeAndModel()
+    return render_template("monitors.html", data=data, user=user)
 
 
 @views.route('/printers')
 def printers():
-    if "user" in session:
-        user = session["user"]
-        data = fetchMakeAndModel()
-        return render_template("printers.html", data=data, user=user)
-    else:
+    if "user" not in session:
         return redirect(url_for("auth.login"))
+
+    user = session["user"]
+    data = fetchMakeAndModel()
+    return render_template("printers.html", data=data, user=user)
 
 
 @views.route('/admin')
@@ -110,22 +144,22 @@ def admin():
 
 @views.route('/network')
 def network():
-    if "user" in session:
-        user = session["user"]
-        data = fetchMakeAndModel()
-        return render_template("network.html", data=data, user=user)
-    else:
+    if "user" not in session:
         return redirect(url_for("auth.login"))
+
+    user = session["user"]
+    data = fetchMakeAndModel()
+    return render_template("network.html", data=data, user=user)
 
 
 @views.route('/cartridges')
 def cartridges():
-    if "user" in session:
-        user = session["user"]
-        data = fetchMakeAndModel()
-        return render_template("cartridges.html", data=data, user=user)
-    else:
+    if "user" not in session:
         return redirect(url_for("auth.login"))
+
+    user = session["user"]
+    data = fetchMakeAndModel()
+    return render_template("cartridges.html", data=data, user=user)
 
 
 @views.route('/addCon', methods=['GET', 'POST'])
@@ -142,7 +176,7 @@ def addCon():
         conx.commit()
         conx.close()
     except Exception as e:
-        flash(e, category='error')
+        flash(str(e), category='error')
     return redirect('/cartridges')
 
 
@@ -183,10 +217,7 @@ def addComputer():
     else:
         condition = 3
 
-    if category1 == 'Desktop':
-        category = 4
-    else:
-        category = 3
+    category = 4 if category1 == 'Desktop' else 3
     modelname = makeAndModel.split()[1]
     cpu = request.form.get('cpu')
     ram = request.form.get('ram')
@@ -213,34 +244,33 @@ def addComputer():
 
 @views.route('/issueComputer', methods=['GET', 'POST'])
 def issueComputer():
-    if request.method == 'POST':
-        snumber = request.form.get('snumber1')
-        useremail = request.form.get('user')
-        date = request.form.get('date')
-        cpu = request.form.get('cpu')
-        ram = request.form.get('ram')
-        strgType = request.form.get('strgType')
-        strgCap = request.form.get('strgCap')
-        getuserId = 'select id from dbo.clients where email = ?'
-        query = 'update dbo.hardware set userId = ? , receiveDate = ? where dbo.hardware.serialNumber = ?'
-        specQuery = 'update specs set serialNumber = ?, cpu = ?, ram = ?, strgType = ?, strgCap = ?)'
-        try:
-            from .db_connect import connect_sql
-            conx = connect_sql()
-            cursor = conx.cursor()
-            cursor.execute(getuserId, useremail)
-            data = cursor.fetchone()
-            userId = data.id
-            cursor.execute(query, userId, date, snumber)
-            cursor.execute(specQuery, cpu, ram, strgType, strgCap)
-            conx.commit()
-            conx.close()
-            addToCart(snumber)
-            global Gdate
-            Gdate = date
-        except Exception as e:
-            flash(e, category='error')
-        return redirect('/computers')
+    snumber = request.form.get('snumber1')
+    useremail = request.form.get('user')
+    date = request.form.get('date')
+    cpu = request.form.get('cpu')
+    ram = request.form.get('ram')
+    strgType = request.form.get('strgType')
+    strgCap = request.form.get('strgCap')
+    getuserId = 'select id from dbo.clients where email = ?'
+    query = 'update dbo.hardware set userId = ? , receiveDate = ? where dbo.hardware.serialNumber = ?'
+    specQuery = 'update specs set serialNumber = ?, cpu = ?, ram = ?, strgType = ?, strgCap = ?)'
+    try:
+        from .db_connect import connect_sql
+        conx = connect_sql()
+        cursor = conx.cursor()
+        cursor.execute(getuserId, useremail)
+        data = cursor.fetchone()
+        userId = data.id
+        cursor.execute(query, userId, date, snumber)
+        cursor.execute(specQuery, cpu, ram, strgType, strgCap)
+        conx.commit()
+        conx.close()
+        addToCart(snumber)
+        global Gdate
+        Gdate = date
+    except Exception as e:
+        flash(e, category='error')
+    return redirect('/computers')
 
 
 @views.route('/addMonitor', methods=['GET', 'POST'])
@@ -460,11 +490,10 @@ def checkSerial():
         cursor = conx.cursor()
         cursor.execute(query, serial.decode('ascii'))
         data = cursor.fetchone()
-        if not data:
-            flash('Serial Not Found', category='error')
-            return render_template("computers.html")
-        else:
+        if data:
             return jsonify('', render_template('/specs.html', data=data))
+        flash('Serial Not Found', category='error')
+        return render_template("computers.html")
     except Exception as e:
         flash(e, category='error')
-        return render_template("computers.html")
+        return render_template('computers.html')

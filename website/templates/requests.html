@@ -2,7 +2,7 @@
 <div class="border p-md-4 my-5" id="requests-tab">
     <h2>Add New Request</h2>
     <div class="my-3">
-        <form action="/addreq" method="post">
+        <form action="/requests" method="post">
             <div class="row mb-3">
                 <div class="col">
                     <label for="user" class="text-light h4">Requested for</label>
@@ -54,22 +54,32 @@
             <tbody>
                 {% for row in data %}
                 <tr>
-                    {% for cell in row %}
                     <td>
-                        {{ cell }}
-                    </td>
-                    {% endfor %}
-                    <td>
-                        <input name="pr" id="pr" type="text" class="form-control ms-auto" placeholder="PR NUmber">
+                        {{ row.reqestedItem }}
                     </td>
                     <td>
-                        <input name="po" id="po" type="text" class="form-control ms-auto" placeholder="PO NUmber">
+                        {{ row.reqestedFor }}
                     </td>
                     <td>
-                        <input name="request-date" id="request-date" type="date" class="form-control ms-auto">
+                        <select name="status" id="status">
+                            <option value="Pending"{% if row.status==1 %} selected="selected"{% endif %}>Pending</option>
+                            <option value="Requested"{% if row.status==2 %} selected="selected"{% endif %}>Requested</option>
+                            <option value="Received By User"{% if row.status==3 %} selected="selected"{% endif %}>Received By User</option>
+                            <option value="in IT"{% if row.status==4 %} selected="selected"{% endif %}>in IT</option>
+                            <option value="Cancelled"{% if row.status==5 %} selected="selected"{% endif %}>Cancelled</option>
+                        </select>
                     </td>
                     <td>
-                        <input name="receive-date" id="receive-date" type="date" class="form-control ms-auto">
+                        <input name="pr" id="pr" type="text" class="form-control ms-auto" placeholder="PR NUmber" value="{{ row.prNumber }}">
+                    </td>
+                    <td>
+                        <input name="po" id="po" type="text" class="form-control ms-auto" placeholder="PO NUmber" value="{{ row.poNumber }}">
+                    </td>
+                    <td>
+                        <input name="requestDate" id="requestDate" type="date" class="form-control ms-auto" value="{{ row.requestDate }}">
+                    </td>
+                    <td>
+                        <input name="receiveDate" id="receiveDate" type="date" class="form-control ms-auto" value="{{ row.receiveDate }}">
                     </td>
                     <td>
                         <button type="button" onclick="" class="btn btn-primary text-dark">Update</button>
