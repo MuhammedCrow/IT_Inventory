@@ -2,7 +2,7 @@
 <div class="border p-md-4 my-5" id="requests-tab">
     <h2>Add New Request</h2>
     <div class="my-3">
-        <form action="/requests" method="post">
+        <form action="/addreq" method="post">
             <div class="row mb-3">
                 <div class="col">
                     <label for="user" class="text-light h4">Requested for</label>
@@ -51,14 +51,14 @@
                     {% endfor %}
                 </tr>
             </thead>
-            <tbody>
+            <tbody class="text-light">
                 {% for row in data %}
                 <tr>
                     <td>
-                        {{ row.reqestedItem }}
+                        {{ row.reqItm }}
                     </td>
                     <td>
-                        {{ row.reqestedFor }}
+                        {{ row.reqUser }}
                     </td>
                     <td>
                         <select name="status" id="status">

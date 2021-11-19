@@ -55,9 +55,9 @@ def requests():
     if "user" not in session:
         return redirect(url_for("auth.login"))
     if request.method == 'GET':
-        getReq = 'Select * from requests'
+        getReq = 'SELECT consumableCat.name as reqItm, clients.name as reqUser, requests.[status], requests.PRNumber, requests.PONumber,requests.requestDate, requests.receiveDate from requests INNER JOIN consumableCat on requests.requestedItem = consumableCat.id INNER JOIN clients on requests.requestedFor = clients.id'
         headings = ('Requested Item', 'requested By', 'Status',
-                    'PR Number', 'PO Number', 'Request Data', 'Recieve Data', )
+                    'PR Number', 'PO Number', 'Request Data', 'Recieve Data')
         try:
             from .db_connect import connect_sql
             conx = connect_sql()
@@ -68,28 +68,30 @@ def requests():
             cat = fetchCategory()
             return render_template('requests.html', headings=headings, data=data, category=cat)
         except Exception as e:
-            flash(e, category='error')
-    else:
-        userEmail = request.form.get('user')
-        catName = request.form.get('category')
-        getCat = 'select id from consumableCat where name = ?'
-        getUser = 'select id from clients where email = ?'
-        query = 'insert into requests requests(requestedItem, requestedFor, status) values(?,?,?)'
-        try:
-            from .db_connect import connect_sql
-            conx = connect_sql()
-            cursor = conx.cursor()
-            cursor.execute(getCat, catName)
-            cat = cursor.fetchone()
-            cursor.execute(getUser, userEmail)
-            user = cursor.fetchone()
-            cursor.execute(query, cat, user, 1)
-            cursor.commit()
-            conx.close()
-            return redirect(url_for("views.requests"))
-        except Exception as e:
             flash(str(e), category='error')
-            return redirect(url_for("views.requests"))
+
+
+@views.route('/addreq', methods=['GET', 'POST'])
+def addreq():
+    userEmail = request.form.get('user')
+    catName = request.form.get('category')
+    getCat = 'select id from consumableCat where name = ?'
+    getUser = 'select id from clients where email = ?'
+    query = 'insert into requests(requestedItem, requestedFor, status) values(?,?)'
+    try:
+        from .db_connect import connect_sql
+        conx = connect_sql()
+        cursor = conx.cursor()
+        cursor.execute(getCat, catName)
+        cat = cursor.fetchone()
+        cursor.execute(getUser, userEmail)
+        user = cursor.fetchone()
+        cursor.execute(query, cat.id, user.id, 1)
+        cursor.commit()
+        conx.close()
+    except Exception as e:
+        flash(str(e), category='error')
+    return redirect(url_for("views.requests"))
 
 
 @views.route('/other')
