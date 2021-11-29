@@ -61,6 +61,9 @@
                         {{ row.reqUser }}
                     </td>
                     <td>
+                        {{ row.dept }}
+                    </td>
+                    <td>
                         <select name="status" id="status">
                             <option value="Pending"{% if row.status==1 %} selected="selected"{% endif %}>Pending</option>
                             <option value="Requested"{% if row.status==2 %} selected="selected"{% endif %}>Requested</option>
@@ -82,7 +85,7 @@
                         <input name="receiveDate" id="receiveDate" type="date" class="form-control ms-auto" value="{{ row.receiveDate }}">
                     </td>
                     <td>
-                        <button type="button" onclick="" class="btn btn-primary text-dark">Update</button>
+                        <button type="button" onclick="updateRow()" class="btn btn-primary text-dark">Update</button>
                     </td>
                     <td>
                         <button type="button" onclick="" class="btn btn-primary text-dark">Receive</button>

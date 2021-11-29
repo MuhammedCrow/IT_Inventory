@@ -55,8 +55,8 @@ def requests():
     if "user" not in session:
         return redirect(url_for("auth.login"))
     if request.method == 'GET':
-        getReq = 'SELECT consumableCat.name as reqItm, clients.name as reqUser, requests.[status], requests.PRNumber, requests.PONumber,requests.requestDate, requests.receiveDate from requests INNER JOIN consumableCat on requests.requestedItem = consumableCat.id INNER JOIN clients on requests.requestedFor = clients.id'
-        headings = ('Requested Item', 'requested By', 'Status',
+        getReq = 'SELECT consumableCat.name as reqItm, clients.name as reqUser, departments.name as dept, requests.[status], requests.PRNumber, requests.PONumber,requests.requestDate, requests.receiveDate from requests INNER JOIN consumableCat on requests.requestedItem = consumableCat.id INNER JOIN clients on requests.requestedFor = clients.id INNER JOIN departments on requests.dept = departments.id'
+        headings = ('Requested Item', 'requested By', 'Department', 'Status',
                     'PR Number', 'PO Number', 'Request Data', 'Recieve Data')
         try:
             from .db_connect import connect_sql
@@ -69,6 +69,7 @@ def requests():
             return render_template('requests.html', headings=headings, data=data, category=cat)
         except Exception as e:
             flash(str(e), category='error')
+    return render_template('requests.html')
 
 
 @views.route('/addreq', methods=['GET', 'POST'])
@@ -76,8 +77,8 @@ def addreq():
     userEmail = request.form.get('user')
     catName = request.form.get('category')
     getCat = 'select id from consumableCat where name = ?'
-    getUser = 'select id from clients where email = ?'
-    query = 'insert into requests(requestedItem, requestedFor, status) values(?,?)'
+    getUser = 'select id, departmentId from clients where email = ?'
+    query = 'insert into requests(requestedItem, requestedFor, dept ,status) values(?,?,?,?)'
     try:
         from .db_connect import connect_sql
         conx = connect_sql()
@@ -86,7 +87,7 @@ def addreq():
         cat = cursor.fetchone()
         cursor.execute(getUser, userEmail)
         user = cursor.fetchone()
-        cursor.execute(query, cat.id, user.id, 1)
+        cursor.execute(query, cat.id, user.id, user.departmentId, 1)
         cursor.commit()
         conx.close()
     except Exception as e:
@@ -200,7 +201,7 @@ def issueCon():
         consumables.append(cons)
         Gdate = date
     except Exception as e:
-        flash(e, category='error')
+        flash(str(e), category='error')
     return redirect('/cartridges')
 
 
@@ -240,7 +241,7 @@ def addComputer():
         conx.commit()
         conx.close()
     except Exception as e:
-        flash(e, category='error')
+        flash(str(e), category='error')
     return redirect('/computers')
 
 
@@ -271,7 +272,7 @@ def issueComputer():
         global Gdate
         Gdate = date
     except Exception as e:
-        flash(e, category='error')
+        flash(str(e), category='error')
     return redirect('/computers')
 
 
@@ -301,7 +302,7 @@ def addMonitor():
         conx.commit()
         conx.close()
     except Exception as e:
-        flash(e, category='error')
+        flash(str(e), category='error')
     return redirect('/monitors')
 
 
@@ -326,7 +327,7 @@ def issueMonitor():
         global Gdate
         Gdate = date
     except Exception as e:
-        flash(e, category='error')
+        flash(str(e), category='error')
     return redirect('/monitors')
 
 
@@ -356,7 +357,7 @@ def addPrinter():
         conx.commit()
         conx.close()
     except Exception as e:
-        flash(e, category='error')
+        flash(str(e), category='error')
     return redirect('/printers')
 
 
@@ -381,7 +382,7 @@ def issuePrinter():
         global Gdate
         Gdate = date
     except Exception as e:
-        flash(e, category='error')
+        flash(str(e), category='error')
     return redirect('/printers')
 
 
@@ -414,7 +415,7 @@ def addNetwork():
         conx.commit()
         conx.close()
     except Exception as e:
-        flash(e, category='error')
+        flash(str(e), category='error')
     return redirect('/network')
 
 
@@ -439,7 +440,7 @@ def issueNetwork():
         global Gdate
         Gdate = date
     except Exception as e:
-        flash(e, category='error')
+        flash(str(e), category='error')
     return redirect('/network')
 
 
@@ -465,7 +466,7 @@ def searchClients():
             results = data
             return render_template('/clients.html', data=data)
     except Exception as e:
-        flash(e, category='error')
+        flash(str(e), category='error')
         return render_template('/clients.html')
 
 
@@ -497,5 +498,5 @@ def checkSerial():
         flash('Serial Not Found', category='error')
         return render_template("computers.html")
     except Exception as e:
-        flash(e, category='error')
+        flash(str(e), category='error')
         return render_template('computers.html')
