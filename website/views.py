@@ -1,3 +1,4 @@
+import re
 from flask import Blueprint, render_template, request, jsonify, flash
 from flask.globals import session
 from flask.helpers import url_for
@@ -10,19 +11,47 @@ consumables = []
 Gdate = 0
 
 
-def fetchMakeAndModel():
+def fetchMakeAndModel(cat):
     from .db_connect import connect_sql
     conx = connect_sql()
-    query = 'Select dbo.make.name, dbo.model.name from dbo.model inner join dbo.make on dbo.make.id = dbo.model.makeId'
+    query = 'Select dbo.make.name as make, dbo.model.name as model from dbo.model inner join dbo.make on dbo.make.id = dbo.model.makeId WHERE model.catId = ?'
     cursor = conx.cursor()
-    cursor.execute(query)
+    cursor.execute(query, cat)
     return cursor.fetchall()
+
+
+def consumption(dept, model, date, amount):  # sourcery skip: extract-method
+    consumptionQuery = 'insert into consConsumption(deptId, consId, date, catId, amount) values(?,?,?,?,?)'
+    getDeptId = 'select id from departments where name = ?'
+    getConsId = 'select id from dbo.consumable where name = ?'
+    try:
+        from .db_connect import connect_sql
+        conx = connect_sql()
+        cursor = conx.cursor()
+        cursor.execute(getDeptId, dept)
+        deptId = cursor.fetchone()
+        cursor.execute(getConsId, model)
+        consId = cursor.fetchone()
+        cursor.execute(consumptionQuery, deptId.id, consId.id, date, 1, amount)
+        conx.commit()
+        conx.close()
+    except Exception as e:
+        flash(str(e), category='error')
 
 
 def fetchCategory():
     from .db_connect import connect_sql
     conx = connect_sql()
     query = 'Select name from consumableCat'
+    cursor = conx.cursor()
+    cursor.execute(query)
+    return cursor.fetchall()
+
+
+def fetchDepartments():
+    from .db_connect import connect_sql
+    conx = connect_sql()
+    query = 'Select name from departments'
     cursor = conx.cursor()
     cursor.execute(query)
     return cursor.fetchall()
@@ -55,8 +84,8 @@ def requests():
     if "user" not in session:
         return redirect(url_for("auth.login"))
     if request.method == 'GET':
-        getReq = 'SELECT consumableCat.name as reqItm, clients.name as reqUser, departments.name as dept, requests.[status], requests.PRNumber, requests.PONumber,requests.requestDate, requests.receiveDate from requests INNER JOIN consumableCat on requests.requestedItem = consumableCat.id INNER JOIN clients on requests.requestedFor = clients.id INNER JOIN departments on requests.dept = departments.id'
-        headings = ('Requested Item', 'requested By', 'Department', 'Status',
+        getReq = 'SELECT consumableCat.name as reqItm, clients.name as reqUser, departments.name as dept, requests.amount, requests.[status], requests.PRNumber, requests.PONumber,requests.requestDate, requests.receiveDate from requests INNER JOIN consumableCat on requests.requestedItem = consumableCat.id INNER JOIN clients on requests.requestedFor = clients.id INNER JOIN departments on requests.dept = departments.id'
+        headings = ('Requested Item', 'Requested By', 'Department', 'Amount', 'Status',
                     'PR Number', 'PO Number', 'Request Data', 'Recieve Data')
         try:
             from .db_connect import connect_sql
@@ -76,9 +105,10 @@ def requests():
 def addreq():
     userEmail = request.form.get('user')
     catName = request.form.get('category')
+    amount = request.form.get('amount')
     getCat = 'select id from consumableCat where name = ?'
     getUser = 'select id, departmentId from clients where email = ?'
-    query = 'insert into requests(requestedItem, requestedFor, dept ,status) values(?,?,?,?)'
+    query = 'insert into requests(requestedItem, requestedFor, dept , amount, status) values(?,?,?,?,?)'
     try:
         from .db_connect import connect_sql
         conx = connect_sql()
@@ -87,7 +117,7 @@ def addreq():
         cat = cursor.fetchone()
         cursor.execute(getUser, userEmail)
         user = cursor.fetchone()
-        cursor.execute(query, cat.id, user.id, user.departmentId, 1)
+        cursor.execute(query, cat.id, user.id, user.departmentId, amount, 1)
         cursor.commit()
         conx.close()
     except Exception as e:
@@ -116,7 +146,8 @@ def computers():
         return redirect(url_for("auth.login"))
 
     user = session["user"]
-    data = fetchMakeAndModel()
+    data = fetchMakeAndModel(3)
+    data += fetchMakeAndModel(4)
     return render_template("computers.html", data=data, user=user)
 
 
@@ -126,7 +157,7 @@ def monitors():
         return redirect(url_for("auth.login"))
 
     user = session["user"]
-    data = fetchMakeAndModel()
+    data = fetchMakeAndModel(5)
     return render_template("monitors.html", data=data, user=user)
 
 
@@ -136,7 +167,7 @@ def printers():
         return redirect(url_for("auth.login"))
 
     user = session["user"]
-    data = fetchMakeAndModel()
+    data = fetchMakeAndModel(6)
     return render_template("printers.html", data=data, user=user)
 
 
@@ -151,7 +182,10 @@ def network():
         return redirect(url_for("auth.login"))
 
     user = session["user"]
-    data = fetchMakeAndModel()
+    data = fetchMakeAndModel(7)
+    data += fetchMakeAndModel(8)
+    data += fetchMakeAndModel(9)
+    data += fetchMakeAndModel(10)
     return render_template("network.html", data=data, user=user)
 
 
@@ -161,8 +195,9 @@ def cartridges():
         return redirect(url_for("auth.login"))
 
     user = session["user"]
-    data = fetchMakeAndModel()
-    return render_template("cartridges.html", data=data, user=user)
+    data = fetchMakeAndModel(1)
+    depts = fetchDepartments()
+    return render_template("cartridges.html", data=data, depts=depts, user=user)
 
 
 @views.route('/addCon', methods=['GET', 'POST'])
@@ -170,12 +205,11 @@ def addCon():
     try:
         amount = int(request.form.get('amount'))
         model = request.form.get('model')
-        modelname = model.split()[1]
         from .db_connect import connect_sql
         conx = connect_sql()
         query = 'update dbo.consumable SET amount += ? where dbo.consumable.name = ?'
         cursor = conx.cursor()
-        cursor.execute(query, amount, modelname)
+        cursor.execute(query, amount, model)
         conx.commit()
         conx.close()
     except Exception as e:
@@ -185,17 +219,19 @@ def addCon():
 
 @views.route('/issueCon', methods=['GET', 'POST'])
 def issueCon():
+    amount = int(request.form.get('amount'))
+    model = request.form.get('model')
+    date = request.form.get('date')
+    dept = request.form.get('dept')
+    query = 'update dbo.consumable SET amount -= ? where dbo.consumable.name = ?'
     try:
-        amount = int(request.form.get('amount'))
-        model = request.form.get('model')
-        date = request.form.get('date')
         from .db_connect import connect_sql
         conx = connect_sql()
-        query = 'update dbo.consumable SET amount -= ? where dbo.consumable.name = ?'
         cursor = conx.cursor()
         cursor.execute(query, amount, model)
         conx.commit()
         conx.close()
+        consumption(dept, model, date, amount)
         cons = (model, 'Cartridge', amount)
         global consumables, Gdate
         consumables.append(cons)
@@ -500,3 +536,11 @@ def checkSerial():
     except Exception as e:
         flash(str(e), category='error')
         return render_template('computers.html')
+
+
+@views.route('/reqUpdate', methods=['POST'])
+def reqUpdate():
+    data = request.get_data()
+    data = data.decode('ascii')
+    print(data.pr)
+    return render_template('requests.html')

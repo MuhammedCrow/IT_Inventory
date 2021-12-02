@@ -25,6 +25,14 @@
                     </select>
                 </div>
             </div>
+            <div class="row mb-3">
+                <div class="col">
+                    <label for="amount" class="text-light h4">Amount</label>
+                </div>
+                <div class="col">
+                    <input name="amount" id="amount" type="text" class="form-control ms-auto" value="1">
+                </div>
+            </div>
             <div class="row">
                 <button class="btn btn-primary px-3 col-2 ms-auto text-dark" type="submit">
                     <h5 class="text-dark">
@@ -40,7 +48,7 @@
         </div>
         <div class="col border-bottom border-primary border-3"></div>
     </div>
-    <div class="row">
+    <div>
         <table class="table text-light">
             <thead>
                 <tr>
@@ -49,21 +57,26 @@
                         {{ head }}
                     </th>
                     {% endfor %}
+                    <th> </th>
+                    <th> </th>
                 </tr>
             </thead>
             <tbody class="text-light">
                 {% for row in data %}
                 <tr>
-                    <td>
+                    <td class="col">
                         {{ row.reqItm }}
                     </td>
-                    <td>
+                    <td class="col">
                         {{ row.reqUser }}
                     </td>
-                    <td>
+                    <td class="col">
                         {{ row.dept }}
                     </td>
-                    <td>
+                    <td class="col">
+                        {{ row.amount }}
+                    </td>
+                    <td class="col">
                         <select name="status" id="status">
                             <option value="Pending"{% if row.status==1 %} selected="selected"{% endif %}>Pending</option>
                             <option value="Requested"{% if row.status==2 %} selected="selected"{% endif %}>Requested</option>
@@ -72,23 +85,23 @@
                             <option value="Cancelled"{% if row.status==5 %} selected="selected"{% endif %}>Cancelled</option>
                         </select>
                     </td>
-                    <td>
+                    <td class="col">
                         <input name="pr" id="pr" type="text" class="form-control ms-auto" placeholder="PR NUmber" value="{{ row.prNumber }}">
                     </td>
-                    <td>
+                    <td class="col">
                         <input name="po" id="po" type="text" class="form-control ms-auto" placeholder="PO NUmber" value="{{ row.poNumber }}">
                     </td>
-                    <td>
+                    <td class="col">
                         <input name="requestDate" id="requestDate" type="date" class="form-control ms-auto" value="{{ row.requestDate }}">
                     </td>
-                    <td>
+                    <td class="col">
                         <input name="receiveDate" id="receiveDate" type="date" class="form-control ms-auto" value="{{ row.receiveDate }}">
                     </td>
-                    <td>
-                        <button type="button" onclick="updateRow()" class="btn btn-primary text-dark">Update</button>
+                    <td class="col">
+                        <button type="button" class="btn btn-primary text-dark btn-sm updateRow">Update</button>
                     </td>
-                    <td>
-                        <button type="button" onclick="" class="btn btn-primary text-dark">Receive</button>
+                    <td class="col">
+                        <button type="button" onclick="" class="btn btn-primary text-dark btn-sm">Receive</button>
                     </td>
                 </tr>
                 {% endfor %}

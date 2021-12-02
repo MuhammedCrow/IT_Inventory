@@ -1,6 +1,5 @@
 function checkSerial() {
     var serial = $('#snumber1').val();
-    console.log(serial)
     $.ajax({
         url: "/checkSerial",
         type: "POST",
@@ -11,6 +10,19 @@ function checkSerial() {
     });
 }
 
-function updateRow() {
-    var
-}
+$(document).ready(function() {
+    $(".updateRow").on('click', function() {
+        var currentRow = $(this).closest("tr");
+        var amount = currentRow.find("td:eq(3)").find("input").val();
+        var status = currentRow.find("td:eq(4)").find("option:selected").text();
+        var pr = currentRow.find("td:eq(5)").find("input").val();
+        var po = currentRow.find("td:eq(6)").find("input").val();
+        var requestDate = currentRow.find("td:eq(7)").find("input").val();
+        var receiveDate = currentRow.find("td:eq(8)").find("input").val();
+        $.ajax({
+            url: "/reqUpdate",
+            type: "POST",
+            data: { amount: amount, status: status, pr: pr, po: po, requestDate: requestDate, receiveDate: receiveDate }
+        });
+    });
+});
