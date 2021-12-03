@@ -77,7 +77,7 @@
                         {{ row.amount }}
                     </td>
                     <td class="col">
-                        <select name="status" id="status">
+                        <select name="status" id="status" class="form-control form-control-sm">
                             <option value="Pending"{% if row.status==1 %} selected="selected"{% endif %}>Pending</option>
                             <option value="Requested"{% if row.status==2 %} selected="selected"{% endif %}>Requested</option>
                             <option value="Received By User"{% if row.status==3 %} selected="selected"{% endif %}>Received By User</option>
@@ -86,16 +86,16 @@
                         </select>
                     </td>
                     <td class="col">
-                        <input name="pr" id="pr" type="text" class="form-control ms-auto" placeholder="PR NUmber" value="{{ row.prNumber }}">
+                        <input name="pr" id="pr" type="text" class="form-control ms-auto form-control-sm" placeholder="PR NUmber" value="{{ row.prNumber }}">
                     </td>
                     <td class="col">
-                        <input name="po" id="po" type="text" class="form-control ms-auto" placeholder="PO NUmber" value="{{ row.poNumber }}">
+                        <input name="po" id="po" type="text" class="form-control ms-auto form-control-sm" placeholder="PO NUmber" value="{{ row.poNumber }}">
                     </td>
                     <td class="col">
-                        <input name="requestDate" id="requestDate" type="date" class="form-control ms-auto" value="{{ row.requestDate }}">
+                        <input name="requestDate" id="requestDate" type="date" class="form-control ms-auto form-control-sm" value="{{ row.requestDate }}">
                     </td>
                     <td class="col">
-                        <input name="receiveDate" id="receiveDate" type="date" class="form-control ms-auto" value="{{ row.receiveDate }}">
+                        <input name="receiveDate" id="receiveDate" type="date" class="form-control ms-auto form-control-sm" value="{{ row.receiveDate }}">
                     </td>
                     <td class="col">
                         <button type="button" class="btn btn-primary text-dark btn-sm updateRow">Update</button>

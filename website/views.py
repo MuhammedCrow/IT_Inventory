@@ -549,7 +549,10 @@ def checkSerial():
 
 @views.route('/reqUpdate', methods=['POST'])
 def reqUpdate():
-    data = request.form['status']
-    data = data.decode('ascii')
-    print(data)
-    return render_template('requests.html')
+    status = request.form['status']
+    pr = request.form['pr']
+    po = request.form['po']
+    requestDate = request.form['requestDate']
+    receiveDate = request.form['receiveDate']
+    print(status, pr, po, requestDate, receiveDate)
+    return redirect('/requests')
