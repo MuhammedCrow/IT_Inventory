@@ -93,8 +93,8 @@ def requests():
     if "user" not in session:
         return redirect(url_for("auth.login"))
     if request.method == 'GET':
-        getReq = 'SELECT consumableCat.name as reqItm, clients.name as reqUser, departments.name as dept, requests.amount, requests.[status], requests.PRNumber, requests.PONumber,requests.requestDate, requests.receiveDate from requests INNER JOIN consumableCat on requests.requestedItem = consumableCat.id INNER JOIN clients on requests.requestedFor = clients.id INNER JOIN departments on requests.dept = departments.id'
-        headings = ('Requested Item', 'Requested By', 'Department', 'Amount', 'Status',
+        getReq = 'SELECT requests.id, consumableCat.name as reqItm, clients.name as reqUser, departments.name as dept, requests.amount, requests.[status], requests.PRNumber, requests.PONumber,requests.requestDate, requests.receiveDate from requests INNER JOIN consumableCat on requests.requestedItem = consumableCat.id INNER JOIN clients on requests.requestedFor = clients.id INNER JOIN departments on requests.dept = departments.id'
+        headings = ('ID', 'Requested Item', 'Requested By', 'Department', 'Amount', 'Status',
                     'PR Number', 'PO Number', 'Request Data', 'Recieve Data')
         try:
             from .db_connect import connect_sql
@@ -549,10 +549,34 @@ def checkSerial():
 
 @views.route('/reqUpdate', methods=['POST'])
 def reqUpdate():
+    reqId = request.form['id']
     status = request.form['status']
     pr = request.form['pr']
     po = request.form['po']
     requestDate = request.form['requestDate']
     receiveDate = request.form['receiveDate']
+    if not pr:
+        pr = None
+    if not po:
+        po = None
+    if not requestDate:
+        requestDate = None
+    if not receiveDate:
+        receiveDate = None
     print(status, pr, po, requestDate, receiveDate)
-    return redirect('/requests')
+    getStatusId = 'Select id from dbo.[status] where dbo.[status].[status] = ?'
+    query = 'UPDATE requests SET [status] = ?, PRNumber = ?, PONumber = ?, requestDate = ?, receiveDate =? where id = ?'
+    try:
+        from .db_connect import connect_sql
+        conx = connect_sql()
+        cursor = conx.cursor()
+        cursor.execute(getStatusId, status)
+        statusId = cursor.fetchone()
+        cursor.execute(query, statusId.id, pr, po,
+                       requestDate, receiveDate, reqId)
+        cursor.commit()
+        conx.close()
+    except Exception as e:
+        print(str(e))
+        flash(str(e), category='error')
+    return redirect(url_for("views.requests"))

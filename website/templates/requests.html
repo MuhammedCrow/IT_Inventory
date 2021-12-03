@@ -64,6 +64,7 @@
             <tbody class="text-light">
                 {% for row in data %}
                 <tr>
+                    <td class="col">{{ row.id }}</td>
                     <td class="col">
                         {{ row.reqItm }}
                     </td>
@@ -86,10 +87,10 @@
                         </select>
                     </td>
                     <td class="col">
-                        <input name="pr" id="pr" type="text" class="form-control ms-auto form-control-sm" placeholder="PR NUmber" value="{{ row.prNumber }}">
+                        <input name="pr" id="pr" type="text" class="form-control ms-auto form-control-sm" placeholder="PR NUmber" value="{{ row.PRNumber }}">
                     </td>
                     <td class="col">
-                        <input name="po" id="po" type="text" class="form-control ms-auto form-control-sm" placeholder="PO NUmber" value="{{ row.poNumber }}">
+                        <input name="po" id="po" type="text" class="form-control ms-auto form-control-sm" placeholder="PO NUmber" value="{{ row.PONumber }}">
                     </td>
                     <td class="col">
                         <input name="requestDate" id="requestDate" type="date" class="form-control ms-auto form-control-sm" value="{{ row.requestDate }}">
