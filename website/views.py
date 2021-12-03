@@ -23,7 +23,7 @@ def fetchMakeAndModel(cat):
 def fetchOthers():
     from .db_connect import connect_sql
     conx = connect_sql()
-    query = 'Select dbo.make.name as make, dbo.model.name as model from dbo.model inner join dbo.make on dbo.make.id = dbo.model.makeId'
+    query = 'Select dbo.make.name as make, dbo.model.name as model from dbo.model inner join dbo.make on dbo.make.id = dbo.model.makeId where model.makeId = 5'
     cursor = conx.cursor()
     cursor.execute(query)
     return cursor.fetchall()
@@ -137,16 +137,6 @@ def addreq():
 @views.route('/other')
 def other():
     cat = fetchOthers()
-    cat -= fetchCategory(1)
-    cat -= fetchCategory(3)
-    cat -= fetchCategory(4)
-    cat -= fetchCategory(6)
-    cat -= fetchCategory(6)
-    cat -= fetchCategory(5)
-    cat -= fetchCategory(7)
-    cat -= fetchCategory(8)
-    cat -= fetchCategory(9)
-    cat -= fetchCategory(10)
     return render_template('others.html', data=cat)
 
 
