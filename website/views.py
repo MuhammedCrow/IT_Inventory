@@ -20,6 +20,15 @@ def fetchMakeAndModel(cat):
     return cursor.fetchall()
 
 
+def fetchOthers():
+    from .db_connect import connect_sql
+    conx = connect_sql()
+    query = 'Select dbo.make.name as make, dbo.model.name as model from dbo.model inner join dbo.make on dbo.make.id = dbo.model.makeId'
+    cursor = conx.cursor()
+    cursor.execute(query)
+    return cursor.fetchall()
+
+
 def consumption(dept, model, date, amount):  # sourcery skip: extract-method
     consumptionQuery = 'insert into consConsumption(deptId, consId, date, catId, amount) values(?,?,?,?,?)'
     getDeptId = 'select id from departments where name = ?'
@@ -127,7 +136,17 @@ def addreq():
 
 @views.route('/other')
 def other():
-    cat = fetchCategory()
+    cat = fetchOthers()
+    cat -= fetchCategory(1)
+    cat -= fetchCategory(3)
+    cat -= fetchCategory(4)
+    cat -= fetchCategory(6)
+    cat -= fetchCategory(6)
+    cat -= fetchCategory(5)
+    cat -= fetchCategory(7)
+    cat -= fetchCategory(8)
+    cat -= fetchCategory(9)
+    cat -= fetchCategory(10)
     return render_template('others.html', data=cat)
 
 
