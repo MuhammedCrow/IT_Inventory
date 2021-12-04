@@ -1,4 +1,4 @@
-{% extends "base.html" %} {% block title %}Reports{% endblock %} {% block content %}
+{% extends "base.html" %} {% block title %}Cartridge Consuption{% endblock %} {% block content %}
 <div class="border p-md-4 my-5" id="requests-tab">
     <h2>Select Department</h2>
     <form action="/searchDeptCons" method="post">
@@ -26,11 +26,18 @@
         </div>
         <div class="row mb-3">
             <div class="col">
-                <label for="endDate">Start Date</label>
+                <label for="endDate">End Date</label>
             </div>
             <div class="col">
                 <input class="form-control ms-auto" type="date" name="endDate" id="endDate">
             </div>
+        </div>
+        <div class="row mb-3">
+            <button class="btn btn-primary px-3 col-2 ms-auto text-dark" type="submit">
+                <h5 class="text-dark">
+                    Submit
+                </h5>
+            </button>
         </div>
     </form>
     <div class="row mb-3">
@@ -58,11 +65,10 @@
                         </td>
                         {% endfor %}
                     </tr>
+                    {% endfor %}
                 </tbody>
             </table>
         </div>
     </div>
-
-
 </div>
 {% endblock %}

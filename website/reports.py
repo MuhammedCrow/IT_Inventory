@@ -8,24 +8,21 @@ from .db_connect import connect_sql
 
 reports = Blueprint('reports', __name__)
 
-reports.route('/cartridgeCons')
 
-
+@reports.route('/cartridgeCons')
 def cartridgeCons():
     depts = fetchDepartments()
     return render_template('consumption.html', depts=depts)
 
 
-reports.route('/searchDeptCons', methods=['POST'])
-
-
+@reports.route('/searchDeptCons', methods=['POST'])
 def searchDeptCons():
     headings = ('Cartridge', 'amount')
     dept = request.form.get('dept')
     startDate = request.form.get('startDate')
     endDate = request.form.get('endDate')
     getDeptId = 'select id from departments where name = ?'
-    query = 'SELECT consumable.name, sum(consConsumption.amount) as amount from consConsumption INNER JOIN consumable on consConsumption.consId = consumable.id WHERE consConsumption.date >= \'?\' AND consConsumption.date < \'?\' AND consConsumption.deptId = ? AND consConsumption.catId = ? GROUP BY consumable.name'
+    query = 'SELECT consumable.name, sum(consConsumption.amount) as amount from consConsumption INNER JOIN consumable on consConsumption.consId = consumable.id WHERE consConsumption.date >= \' ? \' AND consConsumption.date < \' ? \' AND consConsumption.deptId = ? AND consConsumption.catId = ? GROUP BY consumable.name'
     try:
         from .db_connect import connect_sql
         conx = connect_sql()
