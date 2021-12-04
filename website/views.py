@@ -198,6 +198,14 @@ def network():
     return render_template("network.html", data=data, user=user)
 
 
+@views.route('/reports')
+def reports():
+    if "user" not in session:
+        return redirect(url_for("auth.login"))
+    user = session["user"]
+    return render_template("reports.html", data=user)
+
+
 @views.route('/cartridges')
 def cartridges():
     if "user" not in session:
