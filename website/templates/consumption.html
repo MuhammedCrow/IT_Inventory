@@ -1,0 +1,68 @@
+{% extends "base.html" %} {% block title %}Reports{% endblock %} {% block content %}
+<div class="border p-md-4 my-5" id="requests-tab">
+    <h2>Select Department</h2>
+    <form action="/searchDeptCons" method="post">
+        <div class="row mb-3">
+            <div class="col">
+                <label for="dept">Select Department</label>
+            </div>
+            <div class="col">
+                <select name="dept" id="dept" class="form-control form-select ms-auto">
+                    {% for row in depts %}
+                    <option>
+                        {{ row.name }}
+                    </option>
+                    {% endfor %}
+                </select>
+            </div>
+        </div>
+        <div class="row mb-3">
+            <div class="col">
+                <label for="startDate">Start Date</label>
+            </div>
+            <div class="col">
+                <input class="form-control ms-auto" type="date" name="startDate" id="startDate">
+            </div>
+        </div>
+        <div class="row mb-3">
+            <div class="col">
+                <label for="endDate">Start Date</label>
+            </div>
+            <div class="col">
+                <input class="form-control ms-auto" type="date" name="endDate" id="endDate">
+            </div>
+        </div>
+    </form>
+    <div class="row mb-3">
+        <div class="col-1">
+            <h3 class="text-primary">Report</h3>
+        </div>
+        <div class="col border-bottom border-primary border-3"></div>
+    </div>
+    <div class="row">
+        <div class="col-6">
+            <table class="table text-light">
+                <thead>
+                    {% for head in headings %}
+                    <th scope="col">
+                        {{ head }}
+                    </th>
+                    {% endfor %}
+                </thead>
+                <tbody>
+                    {% for row in data %}
+                    <tr>
+                        {% for cell in row %}
+                        <td>
+                            {{ cell }}
+                        </td>
+                        {% endfor %}
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+
+</div>
+{% endblock %}
