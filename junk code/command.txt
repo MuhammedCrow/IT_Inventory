@@ -1,0 +1,4 @@
+SELECT consumable.name, sum(consConsumption.amount) as amount from consConsumption
+INNER JOIN consumable on consConsumption.consId = consumable.id
+WHERE consConsumption.date >= '2021-08-06' AND consConsumption.date < '2022-01-01' AND consConsumption.deptId = 1 AND consConsumption.catId = 1
+GROUP BY consumable.name
