@@ -28,5 +28,146 @@
             </div>
         </form>
     </div>
+    <div class="border-bottom">
+        <h2>Add New PC Model</h2>
+        <form action="/addPCModel" method="POST">
+            <div class="row mb-3">
+                <div class="col">
+                    <label class="text-light h4" for="PcMake">Select Manufacturer</label>
+                </div>
+                <div class="col">
+                    <select name="PcMake" id="PcMake" class="form-control form-select ms-auto">
+                        {% for row in make %}
+                        <option>
+                            {{ row.name }}
+                        </option>
+                        {% endfor %}
+                    </select>
+                </div>
+            </div>
+            <div class="row mb-3">
+                <div class="col">
+                    <label class="text-light h4" for="pcModel">Model Nmae</label>
+                </div>
+                <div class="col">
+                    <input class="form-control ms-auto" type="text" name="pcModel" id="pcModel">
+                </div>
+            </div>
+            <div class="row mb-3">
+                <button class="btn btn-primary px-3 col-2 ms-auto text-dark" type="submit">
+                    <h5 class="text-dark">Submit</h5>
+                </button>
+            </div>
+        </form>
+    </div>
+    <div class="border-bottom">
+        <h2>Add New Moniter Model</h2>
+        <form action="/addMonitorModel" method="POST">
+            <div class="row mb-3">
+                <div class="col">
+                    <label class="text-light h4" for="monitorMake">Select Manufacturer</label>
+                </div>
+                <div class="col">
+                    <select name="monitorMake" id="monitorMake" class="form-control form-select ms-auto">
+                        {% for row in make %}
+                        <option>
+                            {{ row.name }}
+                        </option>
+                        {% endfor %}
+                    </select>
+                </div>
+            </div>
+            <div class="row mb-3">
+                <div class="col">
+                    <label class="text-light h4" for="MonitorModel">Model Nmae</label>
+                </div>
+                <div class="col">
+                    <input class="form-control ms-auto" type="text" name="MonitorModel" id="MonitorModel">
+                </div>
+            </div>
+            <div class="row mb-3">
+                <button class="btn btn-primary px-3 col-2 ms-auto text-dark" type="submit">
+                    <h5 class="text-dark">Submit</h5>
+                </button>
+            </div>
+        </form>
+    </div>
+    <div class="border-bottom">
+        <h2>Add New Printer Model</h2>
+        <form action="/addPrinterModel" method="POST">
+            <div class="row mb-3">
+                <div class="col">
+                    <label class="text-light h4" for="printerMake">Select Manufacturer</label>
+                </div>
+                <div class="col">
+                    <select name="printerMake" id="printerMake" class="form-control form-select ms-auto">
+                        {% for row in make %}
+                        <option>
+                            {{ row.name }}
+                        </option>
+                        {% endfor %}
+                    </select>
+                </div>
+            </div>
+            <div class="row mb-3">
+                <div class="col">
+                    <label class="text-light h4" for="printerModel">Model Nmae</label>
+                </div>
+                <div class="col">
+                    <input class="form-control ms-auto" type="text" name="printerModel" id="printerModel">
+                </div>
+            </div>
+            <div class="row mb-3">
+                <button class="btn btn-primary px-3 col-2 ms-auto text-dark" type="submit">
+                    <h5 class="text-dark">Submit</h5>
+                </button>
+            </div>
+        </form>
+    </div>
+    <div class="border-bottom">
+        <h2>Add New Cartridge Model</h2>
+        <form action="" method="POST">
+            <div class="row mb-3">
+                <div class="col">
+                    <label class="text-light h4" for="printerMake">Select Manufacturer</label>
+                </div>
+                <div class="col">
+                    <select name="printerMake" id="printerMake" class="form-control form-select ms-auto">
+                        {% for row in make %}
+                        <option>
+                            {{ row.name }}
+                        </option>
+                        {% endfor %}
+                    </select>
+                </div>
+            </div>
+            <div class="row mb-3">
+                <div class="col">
+                    <label class="text-light h4" for="printerModel">Model Nmae</label>
+                </div>
+                <div class="col">
+                    <input class="form-control ms-auto" type="text" name="printerModel" id="printerModel">
+                </div>
+            </div>
+            <div class="row mb-3">
+                <button class="btn btn-primary px-3 col-2 ms-auto text-dark" type="submit">
+                    <h5 class="text-dark">Submit</h5>
+                </button>
+            </div>
+        </form>
+    </div>
+    <div class="border-bottom">
+        <h2>Add New Network Device Model</h2>
+        <form action="" method="POST">
+
+        </form>
+    </div>
+    <div class="border-bottom">
+        <h2>Add Other Consumables</h2>
+        <form action="" method="POST">
+
+        </form>
+    </div>
+
 </div>
 {% endblock %}

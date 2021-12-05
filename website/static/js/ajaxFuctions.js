@@ -1,14 +1,16 @@
-function checkSerial() {
-    var serial = $('#snumber1').val();
-    $.ajax({
-        url: "/checkSerial",
-        type: "POST",
-        data: serial,
-        success: function(data) {
-            $(specs).replaceWith(data)
-        }
+$(document).ready(function() {
+    $(".checkSerial").on('click', function() {
+        var serial = $('#snumber1').val();
+        $.ajax({
+            url: "/checkSerial",
+            type: "POST",
+            data: { serial: serial },
+            success: function(data) {
+                $(specs).replaceWith(data)
+            }
+        });
     });
-}
+});
 
 $(document).ready(function() {
     $(".updateRow").on('click', function() {

@@ -309,7 +309,7 @@ def issueComputer():
     strgCap = request.form.get('strgCap')
     getuserId = 'select id from dbo.clients where email = ?'
     query = 'update dbo.hardware set userId = ? , receiveDate = ? where dbo.hardware.serialNumber = ?'
-    specQuery = 'update specs set serialNumber = ?, cpu = ?, ram = ?, strgType = ?, strgCap = ?)'
+    specQuery = 'update specs set cpu = ?, ram = ?, strgType = ?, strgCap = ? where serialNumber = ?'
     try:
         from .db_connect import connect_sql
         conx = connect_sql()
@@ -318,7 +318,7 @@ def issueComputer():
         data = cursor.fetchone()
         userId = data.id
         cursor.execute(query, userId, date, snumber)
-        cursor.execute(specQuery, cpu, ram, strgType, strgCap)
+        cursor.execute(specQuery, cpu, ram, strgType, strgCap, snumber)
         conx.commit()
         conx.close()
         addToCart(snumber)
@@ -539,12 +539,12 @@ def printForm():
 @views.route('/checkSerial', methods=['GET', 'POST'])
 def checkSerial():
     try:
-        serial = request.get_data()
+        serial = request.form['serial']
         query = 'select * from dbo.specs where serialNumber = ?'
         from .db_connect import connect_sql
         conx = connect_sql()
         cursor = conx.cursor()
-        cursor.execute(query, serial.decode('ascii'))
+        cursor.execute(query, serial)
         data = cursor.fetchone()
         if data:
             return jsonify('', render_template('/specs.html', data=data))
