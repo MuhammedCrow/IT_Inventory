@@ -102,8 +102,27 @@
                         <button type="button" class="btn btn-primary text-dark btn-sm updateRow">Update</button>
                     </td>
                     <td class="col">
-                        <button type="button" onclick="" class="btn btn-primary text-dark btn-sm">Receive</button>
+                        <button type="button" onclick="" data-bs-toggle="collapse" data-bs-target="#description" aria-expanded="false" aria-controls="description" class="btn-sm btn-primary"><i class="bi bi-caret-down-fill"></i></button>
                     </td>
+                    <!-- <div class="collapse" id="description">
+                        <div class="card card-body">
+                            <div class="row">
+                                <div class="col">
+                                    <h4>Description</h4>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col">
+                                    <h4>Coast Center</h4>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col">
+                                    <h4>Sub-coast Center</h4>
+                                </div>
+                            </div>
+                        </div>
+                    </div> -->
                 </tr>
                 {% endfor %}
             </tbody>

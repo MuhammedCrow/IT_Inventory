@@ -277,7 +277,7 @@ def addComputer():
     modelname = makeAndModel.split()[1]
     cpu = request.form.get('cpu')
     ram = request.form.get('ram')
-    strgType = request.form.get('strgType')
+    strgType = request.form['strgType']
     strgCap = request.form.get('strgCap')
     specQuery = 'insert into specs(serialNumber, cpu, ram, strgType, strgCap) values (?,?,?,?,?)'
     modelquery = 'select id from dbo.model where dbo.model.name = ?'
